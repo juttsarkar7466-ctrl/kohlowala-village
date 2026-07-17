@@ -1,180 +1,158 @@
 window.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-theme');
-        document.getElementById('themeBtn').innerHTML = "☀️ Light Mode";
+        document.getElementById('themeBtn').innerHTML = "☀️ Light";
     }
     renderSite();
-    // Chatroom interval configuration (Auto-Refresh Every 4 seconds)
-    setInterval(loadChatMessages, 4000);
+    setInterval(loadChatMessages, 4000); // 4 Seconds lag-free chat pipeline
 });
 
 function toggleDarkMode() {
     const body = document.body;
     body.classList.toggle('dark-theme');
     const themeBtn = document.getElementById('themeBtn');
-    if (body.classList.contains('dark-theme')) {
-        themeBtn.innerHTML = "☀️ Light Mode";
-        localStorage.setItem('theme', 'dark');
-    } else {
-        themeBtn.innerHTML = "🌙 Dark Mode";
-        localStorage.setItem('theme', 'light');
-    }
+    themeBtn.innerHTML = body.classList.contains('dark-theme') ? "☀️ Light" : "🌙 Dark";
+    localStorage.setItem('theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
 }
 
 async function fetchAPI(endpoint) {
     try { const res = await fetch(`/api/${endpoint}`); return await res.json(); }
-    catch (err) { console.error(`Error ${endpoint}:`, err); return []; }
+    catch (err) { console.error(`Error context ${endpoint}:`, err); return []; }
 }
 
-// ---------------------- RENDER CORE ENGINE ----------------------
+// ---------------------- CORE SITE RENDERING ENGINE ----------------------
 async function renderSite() {
-    // 1. Ticker Notice
+    // Ticker Notice
     const noticeData = await fetchAPI('notice');
     document.getElementById('liveNotice').innerText = noticeData.notice || "Welcome to Kohlowala Portal";
 
-    // 2. Photo Gallery (Admin uploads, Users view)
+    // Photo Gallery
     const photos = await fetchAPI('gallery');
     const galDiv = document.getElementById('galleryContainer');
     galDiv.innerHTML = photos.length === 0 ? '<p>Gallery khali hai.</p>' : '';
     photos.forEach(p => {
-        galDiv.innerHTML += `
-            <div class="store-card">
-                <div class="store-img" style="background-image: url('${p.imgUrl}'); height:250px;"></div>
-                <div class="store-info"><h4>${p.title}</h4></div>
+        galDiv.innerHTML += `<div class="store-card"><div class="store-img" style="background-image: url('${p.imgUrl}'); height:230px;"></div><div class="store-info"><h4>${p.title}</h4></div></div>`;
+    });
+
+    // Masajid Panel Rendering
+    const masjids = await fetchAPI('masjids');
+    const masDiv = document.getElementById('masjidContainer');
+    masDiv.innerHTML = masjids.length === 0 ? '<p>Koi Masjid data mapped nahi hai.</p>' : '';
+    masjids.forEach(m => {
+        masDiv.innerHTML += `
+            <div class="info-card" style="border-left-color: var(--primary);">
+                <div style="display:flex; justify-content:between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <h3>🕌 ${m.name}</h3>
+                    <span class="badge-gender">Juma: ${m.juma}</span>
+                </div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap:5px; margin:10px 0; font-size:13px; text-align:center;">
+                    <div style="background:var(--body-bg); padding:5px; border-radius:4px;"><b>Fajar</b><br>${m.fajar}</div>
+                    <div style="background:var(--body-bg); padding:5px; border-radius:4px;"><b>Zuhar</b><br>${m.zuhar}</div>
+                    <div style="background:var(--body-bg); padding:5px; border-radius:4px;"><b>Asar</b><br>${m.asar}</div>
+                    <div style="background:var(--body-bg); padding:5px; border-radius:4px;"><b>Maghrib</b><br>${m.maghrib}</div>
+                    <div style="background:var(--body-bg); padding:5px; border-radius:4px;"><b>Isha</b><br>${m.isha}</div>
+                </div>
+                ${m.elaan ? `<div style="background:rgba(217,83,79,0.1); color:var(--danger); padding:8px; border-radius:4px; font-size:13px; border-left:3px solid var(--danger)"><strong>📢 Elaan:</strong> ${m.elaan}</div>` : ''}
             </div>`;
     });
 
-    // 3. Emergency Directory
+    // Dairies Table Rendering
+    const dairies = await fetchAPI('dairies');
+    const dbt = document.getElementById('dairyTable').getElementsByTagName('tbody')[0];
+    dbt.innerHTML = '';
+    dairies.forEach(d => {
+        dbt.innerHTML += `<tr><td><strong>${d.name}</strong></td><td><span class="badge-blood">${d.milk}</span></td><td><span class="badge-gender">${d.khoya}</span></td><td>${d.morning}</td><td>${d.evening}</td></tr>`;
+    });
+
+    // Carpool Rendering
+    const carpools = await fetchAPI('carpools');
+    const cpDiv = document.getElementById('carpoolContainer');
+    cpDiv.innerHTML = carpools.length === 0 ? '<p>Abhi koi active lift available nahi hai.</p>' : '';
+    carpools.forEach(c => {
+        cpDiv.innerHTML += `
+            <div class="info-card" style="border-left-color: var(--accent);">
+                <h4>📍 ${c.route}</h4>
+                <p style="font-size:14px; margin:5px 0;">🚗 Gari: <b>${c.vehicle}</b> | ⏰ Time: <b>${c.time}</b></p>
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:5px;">
+                    <small>Driver: <b>${c.driver}</b> (${c.seats} Gunjaish)</small>
+                    <a href="https://wa.me/${c.contact.replace(/[^0-9]/g, '')}" target="_blank" class="btn btn-wa" style="padding:4px 8px; font-size:12px;">Lift Lain</a>
+                </div>
+            </div>`;
+    });
+
+    // Emergency Contacts
     const emes = await fetchAPI('emergency');
     const emt = document.getElementById('emergencyTable').getElementsByTagName('tbody')[0];
     emt.innerHTML = '';
     emes.forEach(e => {
-        emt.innerHTML += `<tr><td><strong>${e.name}</strong></td><td><span class="badge-gender">${e.role}</span></td><td><a href="tel:${e.contact}" class="btn" style="padding:4px 10px; background-color:var(--danger)">📞 Call Now</a></td></tr>`;
+        emt.innerHTML += `<tr><td><strong>${e.name}</strong></td><td><span class="badge-gender">${e.role}</span></td><td><a href="tel:${e.contact}" class="btn" style="padding:4px 10px; background-color:var(--danger)">📞 Call</a></td></tr>`;
     });
 
-    // 4. Kisaan OLX
+    // Kisaan OLX Ads
     const ads = await fetchAPI('olx');
     const olxDiv = document.getElementById('olxContainer');
-    olxDiv.innerHTML = ads.length === 0 ? '<p>Bazaar mein abhi koi samaan nahi hai.</p>' : '';
+    olxDiv.innerHTML = ads.length === 0 ? '<p>Bazaar khali hai.</p>' : '';
     ads.forEach(ad => {
-        olxDiv.innerHTML += `
-            <div class="info-card" style="border-left-color: var(--accent);">
-                <div style="display:flex; justify-content:space-between;"><h4>${ad.title}</h4><span class="badge-blood">${ad.price}</span></div>
-                <p style="font-size:14px; margin:5px 0;">${ad.desc}</p>
-                <small>Bechne Wala: <strong>${ad.owner}</strong></small>
-                <div style="margin-top:10px;"><a href="https://wa.me/${ad.contact.replace(/[^0-9]/g, '')}" target="_blank" class="btn btn-wa" style="padding:4px 8px; font-size:12px;">WhatsApp Contact</a></div>
-            </div>`;
+        olxDiv.innerHTML += `<div class="info-card" style="border-left-color: var(--accent);"><div style="display:flex; justify-content:space-between;"><h4>${ad.title}</h4><span class="badge-blood">${ad.price}</span></div><p style="font-size:13px; margin:5px 0;">${ad.desc}</p><small>By: <b>${ad.owner}</b></small><div style="margin-top:8px;"><a href="https://wa.me/${ad.contact.replace(/[^0-9]/g, '')}" target="_blank" class="btn btn-wa" style="padding:4px 8px; font-size:12px;">WhatsApp</a></div></div>`;
     });
 
-    // 5. Panchayat Voting Polls Tracker
+    // Poll Engine Setup
     const poll = await fetchAPI('polls');
     document.getElementById('pollQuestion').innerText = poll.question;
     document.getElementById('yesCount').innerText = poll.yesVotes || 0;
     document.getElementById('noCount').innerText = poll.noVotes || 0;
 
-    // 6. Events Calendar
-    const evts = await fetchAPI('events');
-    const evtTbl = document.getElementById('eventsTable').getElementsByTagName('tbody')[0];
-    evtTbl.innerHTML = '';
-    evts.forEach(ev => {
-        evtTbl.innerHTML += `<tr><td><strong>${ev.title}</strong></td><td><span class="badge-gender">${ev.date}</span></td><td>${ev.location}</td></tr>`;
-    });
-
-    // 7. Hunar Directory
-    const hunars = await fetchAPI('hunar');
-    const hnt = document.getElementById('hunarTable').getElementsByTagName('tbody')[0];
-    hnt.innerHTML = '';
-    hunars.forEach(h => {
-        hnt.innerHTML += `<tr><td><strong>${h.name}</strong></td><td><span class="badge-blood">${h.skill}</span></td><td><a href="https://wa.me/${h.contact.replace(/[^0-9]/g, '')}" target="_blank" class="btn btn-wa" style="padding:4px 8px; font-size:12px;">Contact</a></td></tr>`;
-    });
-
-    // 8. Job Board Tracker
-    const jobs = await fetchAPI('jobs');
-    const jbt = document.getElementById('jobsTable').getElementsByTagName('tbody')[0];
-    jbt.innerHTML = '';
-    jobs.forEach(j => {
-        jbt.innerHTML += `<tr><td><strong>${j.title}</strong></td><td>${j.company}</td><td><span class="badge-gender">${j.salary}</span></td><td><a href="https://wa.me/${j.contact.replace(/[^0-9]/g, '')}" target="_blank" class="btn btn-wa" style="padding:4px 8px; font-size:12px;">Apply</a></td></tr>`;
-    });
-
-    // 9. Committee Tracker
-    const comms = await fetchAPI('committees');
-    const cmt = document.getElementById('committeeTable').getElementsByTagName('tbody')[0];
-    cmt.innerHTML = '';
-    comms.forEach(c => {
-        cmt.innerHTML += `<tr><td><strong>${c.name}</strong></td><td><span class="badge-blood">${c.total}</span></td><td>${c.monthly}</td><td><span class="badge-gender">${c.winner || 'Pending'}</span></td></tr>`;
-    });
-
     loadChatMessages();
 }
 
-// 💬 Chatroom Live Reloader Logic
+// Chatroom Runtime
 async function loadChatMessages() {
     const messages = await fetchAPI('chat');
     const chatBox = document.getElementById('chatBox');
     if (!chatBox) return;
     chatBox.innerHTML = '';
     messages.reverse().forEach(m => {
-        chatBox.innerHTML += `<p style="margin-bottom:8px;"><strong>${m.username}:</strong> <span style="opacity:0.9;">${m.msg}</span></p>`;
+        chatBox.innerHTML += `<p style="margin-bottom:6px; font-size:14px;"><strong>${m.username}:</strong> <span>${m.msg}</span></p>`;
     });
 }
 
 async function sendChatMessage() {
-    const username = document.getElementById('chatUser').value || "Gumnaam Pindwasi";
+    const username = document.getElementById('chatUser').value || "Pindwasi";
     const msg = document.getElementById('chatMsg').value;
     if (!msg) return;
-    await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, msg })
-    });
-    document.getElementById('chatMsg').value = '';
-    loadChatMessages();
+    await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, msg }) });
+    document.getElementById('chatMsg').value = ''; loadChatMessages();
 }
 
-// 🗳️ Vote Cast Engine
 async function castVote(voteType) {
-    const res = await fetch('/api/polls/vote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: voteType })
-    });
-    const updatedPoll = await res.json();
-    document.getElementById('yesCount').innerText = updatedPoll.yesVotes;
-    document.getElementById('noCount').innerText = updatedPoll.noVotes;
-    alert("Aapka Vote Record Ho Gaya!");
+    const res = await fetch('/api/polls/vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: voteType }) });
+    const updated = await res.json();
+    document.getElementById('yesCount').innerText = updated.yesVotes;
+    document.getElementById('noCount').innerText = updated.noVotes;
+    alert("Vote Registered!");
 }
 
-// 🛒 Kisaan OLX submission
-async function submitOlx(e) {
+async function submitCarpool(e) {
     e.preventDefault();
-    await fetch('/api/olx', {
+    await fetch('/api/carpools', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            title: document.getElementById('oTitle').value,
-            price: document.getElementById('oPrice').value,
-            owner: document.getElementById('oOwner').value,
-            contact: document.getElementById('oContact').value,
-            desc: document.getElementById('oDesc').value
+            driver: document.getElementById('cDriver').value, vehicle: document.getElementById('cVehicle').value,
+            route: document.getElementById('cRoute').value, time: document.getElementById('cTime').value,
+            seats: document.getElementById('cSeats').value, contact: document.getElementById('cContact').value
         })
     });
-    alert("Ad Bazaar mein live ho gaya!");
-    renderSite();
+    alert("Lift Offer Uploaded!"); e.target.reset(); renderSite();
 }
 
-// 🛠️ Hunar Submit
-async function submitHunar(e) {
+async function submitOlx(e) {
     e.preventDefault();
-    await fetch('/api/hunar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: document.getElementById('hName').value, skill: document.getElementById('hSkill').value, contact: document.getElementById('hContact').value })
-    });
-    alert("Hunar register ho gaya!");
-    renderSite();
+    await fetch('/api/olx', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: document.getElementById('oTitle').value, price: document.getElementById('oPrice').value, owner: document.getElementById('oOwner').value, contact: document.getElementById('oContact').value, desc: document.getElementById('oDesc').value }) });
+    alert("Ad Live!"); e.target.reset(); renderSite();
 }
 
-// ---------------------- ADMIN DASHBOARD WRITERS ----------------------
+// ---------------------- ADMIN LOGIC CONTROL PANEL ----------------------
 function loginAdmin() {
     const email = prompt("Admin Gmail:");
     if (email === "Juttsarkar7466@gmail.com") {
@@ -182,63 +160,37 @@ function loginAdmin() {
             document.getElementById('adminPanel').style.display = "block";
             renderAdminLists();
             document.getElementById('adminPanel').scrollIntoView();
-        } else alert("Wrong Password!");
-    } else alert("Wrong Identity!");
+        } else alert("Invalid Password!");
+    } else alert("Unauthorized Access!");
 }
 function logoutAdmin() { document.getElementById('adminPanel').style.display = "none"; }
 
-async function addGalleryPhoto() {
-    await fetch('/api/gallery', {
+async function addMasjidRecord() {
+    await fetch('/api/masjids', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: document.getElementById('admGalTitle').value, imgUrl: document.getElementById('admGalUrl').value })
+        body: JSON.stringify({ name: document.getElementById('adMName').value, fajar: document.getElementById('adMFaj').value, zuhar: document.getElementById('adMZuh').value, asar: document.getElementById('adMAsr').value, maghrib: document.getElementById('adMMag').value, isha: document.getElementById('adMIsh').value, juma: document.getElementById('adMJum').value, elaan: document.getElementById('adMElaan').value })
     });
-    alert("Photo live successfully!"); renderSite(); renderAdminLists();
+    alert("Masjid Details Synced!"); renderSite(); renderAdminLists();
+}
+
+async function addDairyRecord() {
+    await fetch('/api/dairies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: document.getElementById('adDName').value, milk: document.getElementById('adDMilk').value, khoya: document.getElementById('adDKhoya').value, morning: document.getElementById('adDMorn').value, evening: document.getElementById('adDEve').value })
+    });
+    alert("Dairy Rates Logged!"); renderSite(); renderAdminLists();
+}
+
+async function addGalleryPhoto() {
+    await fetch('/api/gallery', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: document.getElementById('admGalTitle').value, imgUrl: document.getElementById('admGalUrl').value }) });
+    alert("Photo Uploaded!"); renderSite(); renderAdminLists();
 }
 
 async function startNewPoll() {
-    await fetch('/api/admin/polls', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: document.getElementById('admPollQuestion').value })
-    });
-    alert("New Panchayat Poll Launched!"); renderSite();
-}
-
-async function addEmergencyContact() {
-    await fetch('/api/emergency', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: document.getElementById('admEmeName').value, role: document.getElementById('admEmeRole').value, contact: document.getElementById('admEmeContact').value })
-    });
-    alert("Emergency contact loaded!"); renderSite(); renderAdminLists();
-}
-
-async function addCalendarEvent() {
-    await fetch('/api/events', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: document.getElementById('admEvtTitle').value, date: document.getElementById('admEvtDate').value, location: document.getElementById('admEvtLoc').value })
-    });
-    alert("Event Scheduled!"); renderSite(); renderAdminLists();
-}
-
-async function addNewJob() {
-    await fetch('/api/jobs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: document.getElementById('admJobTitle').value, company: document.getElementById('admJobComp').value, salary: document.getElementById('admJobSal').value, contact: document.getElementById('admJobCont').value })
-    });
-    alert("Job Posted!"); renderSite(); renderAdminLists();
-}
-
-async function addCommitteeRecord() {
-    await fetch('/api/committees', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: document.getElementById('admComName').value, total: document.getElementById('admComTotal').value, monthly: document.getElementById('admComMonth').value, winner: document.getElementById('admComWin').value })
-    });
-    alert("Committee Logged!"); renderSite(); renderAdminLists();
+    await fetch('/api/admin/polls', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: document.getElementById('admPollQuestion').value }) });
+    alert("Poll Activated!"); renderSite();
 }
 
 async function renderAdminLists() {
@@ -247,15 +199,14 @@ async function renderAdminLists() {
         const tbl = document.getElementById(elementId);
         tbl.innerHTML = '';
         items.forEach(i => {
-            tbl.innerHTML += `<tr><td>${i.title || i.name || i.question || 'Item'}</td><td><button class="admin-btn-del" onclick="deleteItem('${endpoint}','${i._id}')">Remove</button></td></tr>`;
+            tbl.innerHTML += `<tr><td>${i.name || i.title || i.route || 'Log'}</td><td><button class="admin-btn-del" onclick="deleteItem('${endpoint}','${i._id}')">Delete</button></td></tr>`;
         });
     };
+    setupAdminDelList('masjids', 'admListMasjids');
+    setupAdminDelList('dairies', 'admListDairies');
+    setupAdminDelList('carpools', 'admListCarpools');
     setupAdminDelList('gallery', 'admListGallery');
-    setupAdminDelList('emergency', 'admListEmergency');
     setupAdminDelList('olx', 'admListOlx');
-    setupAdminDelList('events', 'admListEvents');
-    setupAdminDelList('jobs', 'admListJobs');
-    setupAdminDelList('committees', 'admListCommittees');
 }
 
 async function deleteItem(collection, id) {
