@@ -1,12 +1,442 @@
-/* Prevent Automatic Font Boosting on Mobile WebKit Viewports */
-input, select, textarea {
-    font-size: 16px !important;
+/* 🎨 SHAHI KOHLOWALA PREMIUM DARK THEME CONFIGURATION */
+:root {
+    --body-bg: #0f1115;       /* Midnight Deep Obsidian */
+    --card-bg: #161a22;       /* Gehra Charcoal Gray */
+    --primary: #00ff87;       /* Neon Mint Green (Headings & Highlights) */
+    --accent: #ffb703;        /* Neon Gold (Prices & Alerts) */
+    --text-main: #f1f5f9;     /* Premium Soft White */
+    --text-muted: #94a3b8;    /* Muted Slate Gray */
+    --border-color: #242b35;  /* Subtle Dark Borders */
+    --danger: #ff4d6d;        /* Neon Red (Emergency & Delete) */
+    --success: #2ec4b6;       /* Teal Success */
 }
+
+/* 🌙 FORCE DARK THEME AS DEFAULT */
+body.dark-theme {
+    /* Mode switching handles gracefully if toggled */
+    --body-bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+}
+
+/* 📱 GLOBAL PERFORMANCE LOCK */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+html, body {
+    background-color: var(--body-bg);
+    color: var(--text-main);
+    max-width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ⚡ LAG FIX: Hardware Acceleration for Mobile Smoothness */
+section, .info-card, .store-card, .custom-table, .form-box {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* 📢 TICKER NOTICE BAR */
 .notice-bar {
-    background-color: var(--primary);
-    color: white;
-    padding: 8px;
-    font-weight: bold;
+    background: linear-gradient(90deg, #00cb6a, #00ff87);
+    color: #050505;
+    padding: 10px;
+    font-weight: 700;
     text-align: center;
+    font-size: 14px;
+    box-shadow: 0 2px 10px rgba(0,255,135,0.2);
+}
+
+/* 🌾 HEADER & NAVIGATION */
+header {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .logo {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary);
+    text-shadow: 0 0 10px rgba(0,255,135,0.3);
+}
+
+nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+nav a:hover, nav a:focus {
+    color: var(--primary);
+}
+
+/* THEME & ADMIN BUTTONS */
+.theme-toggle-btn, .admin-toggle-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.admin-toggle-btn {
+    background-color: rgba(0,255,135,0.1);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.admin-toggle-btn:hover {
+    background-color: var(--primary);
+    color: #000;
+}
+
+/* 🚀 HERO SECTION */
+.hero {
+    background: linear-gradient(135deg, #161a22 0%, #0f1115 100%);
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h1 {
+    color: var(--text-main);
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* 📦 CARDS & SECTIONS */
+section {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+section h2 {
+    color: var(--primary);
+    font-size: 22px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 8px;
+}
+
+.info-card {
+    background-color: var(--body-bg);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+/* 🖼️ PHOTO GALLERY GRID */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.store-card {
+    background-color: var(--body-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.store-card:hover {
+    transform: translateY(-4px);
+}
+
+.store-img {
+    background-size: cover;
+    background-position: center;
+}
+
+.store-info {
+    padding: 12px;
+    text-align: center;
+}
+
+/* 📊 RE-DESIGNED DARK TABLES */
+div[style*="overflow-x:auto"] {
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--body-bg);
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.custom-table th {
+    background-color: var(--border-color);
+    color: var(--primary);
+    padding: 12px;
+    font-size: 14px;
+}
+
+.custom-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-size: 14px;
+}
+
+/* 📝 FORMS & INPUTS CONFIG */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.form-box {
+    background-color: var(--body-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+input, textarea, select {
+    width: 100%;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--primary);
+}
+
+/* 🔘 BUTTONS & BADGES */
+.btn {
+    background-color: var(--primary);
+    color: #000000;
+    border: none;
+    padding: 10px 16px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-wa {
+    background-color: #25d366 !important;
+    color: white !important;
+}
+
+.badge-gender {
+    background-color: rgba(0,255,135,0.1);
+    color: var(--primary);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-blood {
+    background-color: rgba(255,183,3,0.1);
+    color: var(--accent);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* 💬 CHATROOM OPTIMIZATION */
+#chatBox {
+    background-color: #0a0c10;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    height: 250px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+}
+
+#chatBox p {
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    padding-bottom: 5px;
+}
+
+/* 🔒 ADMIN PANEL CONTROL SHEET */
+#adminPanel {
+    display: none;
+    background-color: #11141a;
+    border: 2px solid var(--danger);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.admin-header h3 {
+    color: var(--danger);
+}
+
+.admin-section {
+    background: var(--body-bg);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.admin-section h4 {
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+.admin-btn-del {
+    background-color: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.admin-btn-del:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+/* 🪟 FOOTER SETUP */
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+}
+
+.admin-login-link {
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.3s;
+}
+
+.admin-login-link:hover {
+    color: var(--danger);
+}
+
+/* 📱 RESPONSIVE MEDIA QUERIES FOR PHONES */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px 10px;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px !important;
+        width: 100%;
+    }
+
+    nav a, .theme-toggle-btn, .admin-toggle-btn {
+        font-size: 12px;
+        padding: 5px 8px !important;
+    }
+
+    .hero h1 {
+        font-size: 26px !important;
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+
+    input, textarea, select {
+        font-size: 16px !important; /* Disables automatic Safari font boosting zoom */
+    }
+
+    #chatBox {
+        height: 200px !important;
+    }
+
+    div[style*="display: flex; gap: 10px;"] {
+        flex-direction: column;
+    }
+
+    #chatUser, #chatMsg, button[onclick="sendChatMessage()"] {
+        width: 100% !important;
+    }
 }
