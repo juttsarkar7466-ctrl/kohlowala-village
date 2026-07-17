@@ -1,7 +1,92 @@
-/* Custom Added Layouts for New Features Grid */
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 15px;
+/* 📱 GLOBAL MOBILE & PERFORMANCE OPTIMIZATION */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* Screen se baahar data nahi jayega */
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* ⚡ LAG FIX: Hardware acceleration for smooth scrolling on iOS & Android */
+section, .info-card, .store-card, .custom-table {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* 📊 RESPONSIVE TABLES: Mobile par tables lag nahi karengi aur scroll hongi */
+div[style*="overflow-x:auto"] {
+    -webkit-overflow-scrolling: touch; /* iPhone par smooth scrolling */
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.custom-table th, .custom-table td {
+    white-space: nowrap; /* Text tootega nahi */
+    padding: 10px 12px;
+}
+
+/* 🛠️ MEDIA QUERIES FOR PERFECT MOBILE SCREEN FITTING */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px 10px;
+        text-align: center;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px !important;
+        width: 100%;
+    }
+
+    nav a, .theme-toggle-btn, .admin-toggle-btn {
+        font-size: 13px;
+        padding: 6px 10px !important;
+    }
+
+    .hero h1 {
+        font-size: 24px !important;
+    }
+
+    .hero p {
+        font-size: 14px !important;
+    }
+
+    .container {
+        padding: 10px !important;
+    }
+
+    section {
+        padding: 15px !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Forms adjustment */
+    .grid-2 {
+        grid-template-columns: 1fr !important; /* Mobile par single column ho jayega */
+        gap: 15px;
+    }
+
+    input, textarea, select {
+        font-size: 16px !important; /* iOS zoom-in bug fix (Safari automatic zoom rokne ke liye) */
+    }
+
+    /* Chatroom container on mobile */
+    #chatBox {
+        height: 200px !important;
+    }
+    
+    div[style*="display: flex; gap: 10px;"] {
+        flex-direction: column;
+    }
+    
+    #chatUser, #chatMsg, button[onclick="sendChatMessage()"] {
+        width: 100% !important;
+    }
 }
