@@ -8,30 +8,26 @@
 </head>
 <body>
 
-    <!-- Top Notice Marquee -->
-    <div class="notice-bar">
-        <div class="notice-content" id="liveNotice">Loading website updates...</div>
-    </div>
+    <div class="notice-bar"><div class="notice-content" id="liveNotice">Loading website updates...</div></div>
 
-    <!-- Navigation Header -->
     <header>
-        <div class="logo">🌾 Kohlowala Portal</div>
+        <div class="logo">🌾 Kohlowala</div>
         <nav>
             <a href="#home">Home</a>
-            <a href="#about">Tareekh</a>
-            <a href="#ailaan">📢 Ailaanaat</a>
-            <a href="#mandi-livestock">🐄 Mandi</a>
-            <a href="#clinic">🩺 Doctors</a>
-            <a href="#bhaara">🚜 Rent Tool</a>
-            <a href="#cargo">📦 Cargo</a>
-            <a href="#schemes">📜 Sarkari Schemes</a>
-            <a href="#shikayat">🗣️ Shikayat</a>
+            <a href="#gallery">🖼️ Gallery</a>
+            <a href="#emergency">📞 Emergency</a>
+            <a href="#olx">🛒 Kisaan OLX</a>
+            <a href="#polls">🗳️ Voting</a>
+            <a href="#events">🏆 Events</a>
+            <a href="#hunar">🛠️ Hunar</a>
+            <a href="#jobs">💼 Jobs</a>
+            <a href="#chat">💬 Chatroom</a>
+            <a href="#committee">💰 Committee</a>
             <button class="theme-toggle-btn" onclick="toggleDarkMode()" id="themeBtn">🌙 Dark Mode</button>
-            <button class="admin-toggle-btn" onclick="loginAdmin()" style="background-color: var(--danger); color: white; border: none; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 13px; margin-left: 5px;">🔒 Admin Login</button>
+            <button class="admin-toggle-btn" onclick="loginAdmin()">🔒 Admin</button>
         </nav>
     </header>
 
-    <!-- Hero Section -->
     <div class="hero" id="home">
         <h1>Kohlowala Village Portal</h1>
         <p>Aapka apna digital dehaat platform—jahan community, kisaan, aur khidmat sab aik hi jagah hain.</p>
@@ -39,385 +35,123 @@
 
     <div class="container">
 
-        <!-- About & History -->
-        <section id="about">
-            <h2>Kohlowala Ki Tareekh (History)</h2>
-            <div class="info-card" style="border-left-color: var(--primary);">
-                <p>Kohlowala, Pakistan ke sooba Punjab ke zila <strong>Gujranwala</strong> ka ek mashhoor aur pur-aman gaon hai (Union Council No. 72). Yeh ilaka na sirf apni zarkhaiz zameen aur sunehri faslon ke liye jana jata hai, balki iski sabse bari pehchan yahan ka <strong>kapron ka karobar aur dasti karhai (embroidery)</strong> hai. Yahan ki mehnati khwateen apne hathon se kapron par aisi khoobsurat aur nafees karhai karti hain jiski dhoom poore Gujranwala belt mein hai.</p>
+        <!-- PHOTO GALLERY (Admin Uploads / Users View) -->
+        <section id="gallery">
+            <h2>🖼️ Kohlowala Photo Gallery</h2>
+            <div class="gallery-grid" id="galleryContainer"></div>
+        </section>
+
+        <!-- EMERGENCY DIRECTORY -->
+        <section id="emergency">
+            <h2>📞 Emergency Contact Directory</h2>
+            <div style="overflow-x:auto;">
+                <table class="custom-table" id="emergencyTable">
+                    <thead><tr><th>Naam</th><th>Auhda / Role</th><th>Rabta (Call)</th></tr></thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </section>
 
-        <!-- Ailaan Section -->
-        <section id="ailaan">
-            <h2>📢 Ailaan-e-Aam (Mosque & Public Announcements)</h2>
-            <p style="margin-bottom: 20px;">Gaon ke zaroori ailaanaat dekhne aur bhejne ki jagah. Agar aapka koi ailaan hai, to form fill karke admin ko bhejein.</p>
+        <!-- KISAAN OLX -->
+        <section id="olx">
+            <h2>🛒 Kisaan OLX / Dehati Bazaar</h2>
             <div class="grid-2">
                 <div class="form-box">
-                    <h3>Naya Ailaan Bhejein (For Admin Approval)</h3>
+                    <h3>Apni Cheez Bechne Ke Liye Ad Lagayein</h3>
                     <br>
-                    <form onsubmit="submitAnnouncement(event)">
-                        <div class="form-group">
-                            <label>Ailaan ki Qisam (Type)</label>
-                            <select id="aType" required>
-                                <option value="Khoya-Paya (Lost & Found)">Khoya-Paya (Lost & Found)</option>
-                                <option value="Pani Bandish (Water Issue)">Pani Bandish (Water Issue)</option>
-                                <option value="Emergency Alert">Emergency Alert</option>
-                                <option value="Deegar (Others)">Deegar (Others)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Apna Naam / Pehchan</label>
-                            <input type="text" id="aSender" placeholder="e.g. Masjid Committee" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Ailaan ka Message</label>
-                            <textarea id="aMsg" rows="3" placeholder="Ailaan ki tafseel yahan likhein..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn">Admin Ko Bhejein</button>
+                    <form onsubmit="submitOlx(event)">
+                        <div class="form-group"><label>Cheez ka Naam</label><input type="text" id="oTitle" placeholder="e.g. Massey Ferguson 2018" required></div>
+                        <div class="form-group"><label>Qeemat (Price)</label><input type="text" id="oPrice" placeholder="e.g. Rs. 1,200,000" required></div>
+                        <div class="form-group"><label>Apna Naam</label><input type="text" id="oOwner" required></div>
+                        <div class="form-group"><label>WhatsApp Number</label><input type="text" id="oContact" required></div>
+                        <div class="form-group"><label>Cheez ki Condition / Details</label><textarea id="oDesc" rows="2" required></textarea></div>
+                        <button type="submit" class="btn">Ad Publish Karein</button>
                     </form>
                 </div>
                 <div>
-                    <h3>🔊 Active Ailaanaat (Approved)</h3>
-                    <div id="activeAilaanContainer"></div>
+                    <h3>Bazaar mein Mojood Samaan</h3>
+                    <div id="olxContainer"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Maweshi Mandi Section -->
-        <section id="mandi-livestock">
-            <h2>🐄 Maweshi Mandi (Livestock Marketplace)</h2>
+        <!-- PANCHAYAT VOTING POLLS -->
+        <section id="polls">
+            <h2>🗳️ Panchayat Polls (Voting System)</h2>
+            <div class="info-card" style="border-left-color: var(--primary); text-align: center;">
+                <h3 id="pollQuestion">Loading active poll...</h3>
+                <div style="margin: 20px 0; display:flex; justify-content:center; gap:15px;">
+                    <button class="btn btn-wa" onclick="castVote('yes')">👍 Haan (YES)</button>
+                    <button class="btn" style="background-color:var(--danger);" onclick="castVote('no')">👎 Nahi (NO)</button>
+                </div>
+                <p><strong>Live Results:</strong> Haan: <span id="yesCount">0</span> | Nahi: <span id="noCount">0</span></p>
+            </div>
+        </section>
+
+        <!-- EVENTS CALENDAR -->
+        <section id="events">
+            <h2>🏆 Dehati Khel & Events Calendar</h2>
+            <div style="overflow-x:auto;">
+                <table class="custom-table" id="eventsTable">
+                    <thead><tr><th>Mela / Event Name</th><th>Tareekh (Date)</th><th>Jagah (Location)</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- HUNAR DIRECTORY -->
+        <section id="hunar">
+            <h2>🛠️ Hunar Directory (Local Skills)</h2>
             <div class="grid-2">
                 <div class="form-box">
-                    <h3>Apna Janwar Bechne Ke Liye Lagayein</h3>
+                    <h3>Apna Hunar Register Karein</h3>
                     <br>
-                    <form onsubmit="addLivestock(event)">
-                        <div class="form-group">
-                            <label>Janwar ki Qisam</label>
-                            <input type="text" id="lType" placeholder="e.g. Sahiwal Gaaye, Bakra" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Nasl / Breed / Umar</label>
-                            <input type="text" id="lBreed" placeholder="e.g. Beetal, 2 Saal" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Price (Qeemat)</label>
-                            <input type="text" id="lPrice" placeholder="e.g. Rs. 45,000" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Apna Naam (Owner)</label>
-                            <input type="text" id="lOwner" required>
-                        </div>
-                        <div class="form-group">
-                            <label>WhatsApp Number</label>
-                            <input type="text" id="lContact" placeholder="03001234567" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Details</label>
-                            <textarea id="lDesc" rows="2"></textarea>
-                        </div>
-                        <button type="submit" class="btn">Mandi Mein Shamil Karein</button>
+                    <form onsubmit="submitHunar(event)">
+                        <div class="form-group"><label>Apna Naam</label><input type="text" id="hName" required></div>
+                        <div class="form-group"><label>Hunar (e.g. Plumber, Darzi)</label><input type="text" id="hSkill" required></div>
+                        <div class="form-group"><label>WhatsApp/Phone</label><input type="text" id="hContact" required></div>
+                        <button type="submit" class="btn">Hunar List Karein</button>
                     </form>
                 </div>
                 <div>
-                    <h3>🛒 Mandi Mein Mojood Janwar</h3>
-                    <div class="grid-2" id="livestockContainer" style="grid-template-columns: 1fr;"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Clinic Booking Section -->
-        <section id="clinic">
-            <h2>🩺 Free Online Clinic Booking</h2>
-            <div class="grid-2">
-                <div class="form-box">
-                    <h3>Doctor Apni Details Likhein</h3>
-                    <br>
-                    <form onsubmit="addDoctor(event)">
-                        <div class="form-group">
-                            <label>Doctor Ka Naam</label>
-                            <input type="text" id="docName" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Specialization</label>
-                            <input type="text" id="docSpec" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Check-up Timings & Days</label>
-                            <input type="text" id="docTime" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Fees</label>
-                            <input type="text" id="docFees" required>
-                        </div>
-                        <div class="form-group">
-                            <label>WhatsApp Number</label>
-                            <input type="text" id="docContact" required>
-                        </div>
-                        <button type="submit" class="btn">Register Doctor</button>
-                    </form>
-                </div>
-                <div>
-                    <h3>Maujooda Doctors List</h3>
-                    <div style="overflow-x:auto;">
-                        <table class="custom-table" id="doctorTable">
-                            <thead>
-                                <tr>
-                                    <th>Doctor Name</th>
-                                    <th>Speciality</th>
-                                    <th>Timing</th>
-                                    <th>Fees</th>
-                                    <th>Appointment</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Rent System Section -->
-        <section id="bhaara">
-            <h2>🚜 Kisaan Tool-Sharing (Rent System)</h2>
-            <div class="grid-2">
-                <div class="form-box">
-                    <h3>Apni Cheez Rent Par Charhayein</h3>
-                    <br>
-                    <form onsubmit="addRentItem(event)">
-                        <div class="form-group">
-                            <label>Owner Ka Naam</label>
-                            <input type="text" id="rentOwner" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Cheez ka Naam</label>
-                            <input type="text" id="rentItem" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Kiraya (Rent Rate)</label>
-                            <input type="text" id="rentPrice" required>
-                        </div>
-                        <div class="form-group">
-                            <label>WhatsApp ya Phone Number</label>
-                            <input type="text" id="rentContact" required>
-                        </div>
-                        <button type="submit" class="btn">Add to Rent List</button>
-                    </form>
-                </div>
-                <div>
-                    <h3>Rent Par Dastyab Tools</h3>
-                    <div style="overflow-x:auto;">
-                        <table class="custom-table" id="rentTable">
-                            <thead>
-                                <tr>
-                                    <th>Owner</th>
-                                    <th>Item Name</th>
-                                    <th>Rent Rate</th>
-                                    <th>Contact</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Cargo Section -->
-        <section id="cargo">
-            <h2>📦 Dehati Cargo & Chingchi Booking</h2>
-            <div class="grid-2">
-                <div class="form-box">
-                    <h3>Apna Loader Register Karein</h3>
-                    <br>
-                    <form onsubmit="addCargo(event)">
-                        <div class="form-group">
-                            <label>Driver / Malik ka Naam</label>
-                            <input type="text" id="cOwner" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Gari ki Qisam</label>
-                            <input type="text" id="cVehicle" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Rates (Kiraya)</label>
-                            <input type="text" id="cRates" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Route / Area</label>
-                            <input type="text" id="cRoute" required>
-                        </div>
-                        <div class="form-group">
-                            <label>WhatsApp Number</label>
-                            <input type="text" id="cContact" required>
-                        </div>
-                        <button type="submit" class="btn">Loader List Karein</button>
-                    </form>
-                </div>
-                <div>
-                    <h3>🚛 Available Cargo Directory</h3>
-                    <div style="overflow-x:auto;">
-                        <table class="custom-table" id="cargoTable">
-                            <thead>
-                                <tr>
-                                    <th>Driver</th>
-                                    <th>Vehicle</th>
-                                    <th>Rates</th>
-                                    <th>Route</th>
-                                    <th>Booking</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sarkari Schemes Guide -->
-        <section id="schemes">
-            <h2>📜 Sarkari Scheme & Card Guide</h2>
-            <div class="grid-3">
-                <div class="info-card" style="border-left-color: #008000;">
-                    <h3>💳 Benazir Income Support (BISP)</h3>
-                    <p style="font-size: 14px; margin: 10px 0;">CNIC send to <strong>8171</strong></p>
-                    <a href="https://8171.bisp.gov.pk" target="_blank" class="btn" style="background-color:#008000;">Web Portal Link</a>
-                </div>
-                <div class="info-card" style="border-left-color: #dfb15b;">
-                    <h3>🌾 Punjab Kisaan Card</h3>
-                    <p style="font-size: 14px; margin: 10px 0;">Sasti khaad aur subsidies guide.</p>
-                    <a href="https://pitb.gov.pk" target="_blank" class="btn" style="background-color:#dfb15b; color:#333;">Kisaan Web Guide</a>
-                </div>
-                <div class="info-card" style="border-left-color: #1a0dab;">
-                    <h3>📝 Punjab e-Khidmat</h3>
-                    <p style="font-size: 14px; margin: 10px 0;">Domicile, Fard aur Documents certificates links.</p>
-                    <a href="https://khidmatapp.punjab.gov.pk" target="_blank" class="btn" style="background-color:#1a0dab;">e-Khidmat</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Complaint Box Box -->
-        <section id="shikayat">
-            <h2>🗣️ Shikayat Box (Anonymous Grievance)</h2>
-            <div class="form-box" style="max-width: 600px; margin: 0 auto;">
-                <form onsubmit="submitShikayat(event)">
-                    <div class="form-group">
-                        <label>Maslay ki Category</label>
-                        <select id="shikayatCategory" required>
-                            <option value="Safai (Sanitation)">Safai (Sanitation)</option>
-                            <option value="Bijli (Electricity)">Bijli (Electricity)</option>
-                            <option value="Paani (Water)">Paani (Water)</option>
-                            <option value="Deegar (Others)">Deegar (Others)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Shikayat ki Tafseel</label>
-                        <textarea id="shikayatDesc" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%; background-color: var(--danger);">Gumnaam Shikayat Bhejein</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- Solar Tubewell Scheduler -->
-        <section id="tubewell">
-            <h2>⚡ Solar & Tubewell Timer Schedule</h2>
-            <div class="grid-2">
-                <div>
-                    <table class="custom-table" id="tubewellTable">
-                        <thead>
-                            <tr>
-                                <th>Zone / Area</th>
-                                <th>Tubewell Timing</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="info-card" style="border-left-color: var(--primary);">
-                    <h3>💡 Advice</h3>
-                    <p id="tubewellAdviceText">Dopehar 11:00 AM se 3:00 PM tak solar pressure behtareen hota hai.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Blood Registry -->
-        <section id="blood">
-            <h2>🩸 Khoon ki Atiya (Blood Donation)</h2>
-            <div class="grid-2">
-                <div class="form-box">
-                    <form onsubmit="addUserBlood(event)">
-                        <div class="form-group"><label>Naam</label><input type="text" id="bName" required></div>
-                        <div class="form-group">
-                            <label>Blood Group</label>
-                            <select id="bGroup" required>
-                                <option value="A+">A+</option><option value="B+">B+</option><option value="O+">O+</option><option value="AB+">AB+</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label>Umar</label><input type="number" id="bAge" required></div>
-                        <div class="form-group"><label>WhatsApp Number</label><input type="text" id="bContact" required></div>
-                        <button type="submit" class="btn">Register Donors</button>
-                    </form>
-                </div>
-                <div>
-                    <table class="custom-table" id="bloodTable">
-                        <thead><tr><th>Naam</th><th>Group</th><th>Umar</th><th>Rabta</th></tr></thead>
+                    <table class="custom-table" id="hunarTable">
+                        <thead><tr><th>Karigar</th><th>Hunar</th><th>Rabta</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- Rishta Service -->
-        <section id="rishta">
-            <h2>💍 Rishta Shadi Service</h2>
-            <div class="grid-2">
-                <div class="form-box">
-                    <form onsubmit="addUserRishta(event)">
-                        <div class="form-group"><label>Naam</label><input type="text" id="rName" required></div>
-                        <div class="form-group">
-                            <label>Jins</label>
-                            <select id="rGender" required>
-                                <option value="Larka (Male)">Larka</option><option value="Larki (Female)">Larki</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label>Umar</label><input type="number" id="rAge" required></div>
-                        <div class="form-group"><label>Zaat (Caste)</label><input type="text" id="rCaste" required></div>
-                        <div class="form-group"><label>Education / Job</label><input type="text" id="rJob" required></div>
-                        <div class="form-group"><label>WhatsApp Number</label><input type="text" id="rContact" required></div>
-                        <button type="submit" class="btn">Submit Profile</button>
-                    </form>
-                </div>
-                <div>
-                    <table class="custom-table" id="rishtaTable">
-                        <thead><tr><th>Naam</th><th>Jins</th><th>Umar</th><th>Zaat</th><th>Job</th><th>WhatsApp</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+        <!-- ROZGAR BOARD -->
+        <section id="jobs">
+            <h2>💼 Rozgar (Local Job Board)</h2>
+            <table class="custom-table" id="jobsTable">
+                <thead><tr><th>Naukri (Job Role)</th><th>Factory/Dukan</th><th>Mahana Tankhwah</th><th>Apply Info</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- LIVE CHATROOM -->
+        <section id="chat">
+            <h2>💬 Live Village Chatroom</h2>
+            <p style="font-size:13px; opacity:0.8; margin-bottom:10px;">Bina number share kiye gaon walon se guftagu karein.</p>
+            <div class="form-box" style="background: var(--card-bg);">
+                <div id="chatBox" style="height: 250px; overflow-y: auto; border: 1px solid var(--border-color); padding: 15px; border-radius: 6px; margin-bottom: 15px; background: var(--body-bg);"></div>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="chatUser" placeholder="Apna Naam" style="width: 25%;">
+                    <input type="text" id="chatMsg" placeholder="Message likhein..." style="width: 60%;">
+                    <button class="btn" onclick="sendChatMessage()" style="width: 15%;">Send</button>
                 </div>
             </div>
         </section>
 
-        <!-- Mandi Rates Section -->
-        <section id="mandi">
-            <h2>🌾 Mandi Rates & Kisaan Guide</h2>
-            <div class="grid-2">
-                <div>
-                    <table class="custom-table" id="mandiTable">
-                        <thead><tr><th>Fasal</th><th>Sarkari Rate</th><th>Market Rate</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="info-card" style="border-left-color: #2c4c38;">
-                    <h3>⛅ Mosam advice</h3>
-                    <p id="weatherAdviceBox">Fasal ki katai mosam ke mutabik karein.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Handicrafts Shop -->
-        <section id="shop">
-            <h2>🛍️ Kohlowala Handi-Craft Store</h2>
-            <div class="store-grid" id="storeContainer"></div>
+        <!-- COMMITTEE TRACKER -->
+        <section id="committee">
+            <h2>💰 Gaon Ki Committee Tracker</h2>
+            <table class="custom-table" id="committeeTable">
+                <thead><tr><th>Committee Ka Naam</th><th>Kul Raqam (Total)</th><th>Mahana Qist</th><th>Is Mahine Kiski Nikli?</th></tr></thead>
+                <tbody></tbody>
+            </table>
         </section>
 
         <!-- ==================== ADMIN PANEL DASHBOARD ==================== -->
@@ -426,60 +160,77 @@
                 <h3>⚙️ Kohlowala Control Panel (Admin Dashboard)</h3>
                 <button class="btn" style="background-color: var(--danger);" onclick="logoutAdmin()">Logout</button>
             </div>
+            
             <div class="admin-section">
-                <h4>📢 1. Announcements Control</h4>
-                <table class="custom-table" id="adminAnnouncementsTable">
-                    <thead><tr><th>Type</th><th>Message</th><th>Sender</th><th>Actions</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="admin-section">
-                <h4>🗣️ 2. Received Grievances</h4>
-                <table class="custom-table" id="adminComplaintsTable">
-                    <thead><tr><th>Category</th><th>Message</th><th>Action</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="admin-section">
-                <h4>⚡ 3. Update Tubewell Schedule</h4>
-                <div style="display:flex; gap:10px; margin-bottom:10px;">
-                    <input type="text" id="tZone" placeholder="Zone">
-                    <input type="text" id="tTime" placeholder="Timings">
-                    <input type="text" id="tStatus" placeholder="Status">
-                    <button class="btn" onclick="addTubewellSchedule()">Add</button>
+                <h4>🖼️ 1. Upload Gallery Photo (Via URL Link)</h4>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="admGalTitle" placeholder="Photo Ka Title">
+                    <input type="text" id="admGalUrl" placeholder="Paste Image Link / URL">
+                    <button class="btn" onclick="addGalleryPhoto()">Upload Image</button>
                 </div>
-                <table class="custom-table" id="adminTubewellTable">
-                    <thead><tr><th>Zone Details</th><th>Action</th></tr></thead>
-                    <tbody></tbody>
-                </table>
             </div>
+
             <div class="admin-section">
-                <h4>4. Change Top Notice Ticker</h4>
-                <input type="text" id="adminNoticeInput" style="margin-bottom:10px;">
-                <button class="btn" onclick="updateNotice()">Update Ticker</button>
+                <h4>🗳️ 2. Start a New Panchayat Poll</h4>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="admPollQuestion" placeholder="Enter Question e.g. Kya Gali Pakki Honi Chahye?">
+                    <button class="btn" onclick="startNewPoll()">Launch Poll</button>
+                </div>
             </div>
+
             <div class="admin-section">
-                <h4>5. Delete / View Lists Items</h4>
-                <h5>Doctors</h5>
-                <table class="custom-table" id="adminDoctorTable"><thead><tr><th>Name</th><th>Action</th></tr></thead><tbody></tbody></table>
-                <h5>Rent Items</h5>
-                <table class="custom-table" id="adminRentTable"><thead><tr><th>Item</th><th>Action</th></tr></thead><tbody></tbody></table>
-                <h5>Cargo Services</h5>
-                <table class="custom-table" id="adminCargoTable"><thead><tr><th>Driver</th><th>Action</th></tr></thead><tbody></tbody></table>
-                <h5>Livestock</h5>
-                <table class="custom-table" id="adminLivestockTable"><thead><tr><th>Animal</th><th>Action</th></tr></thead><tbody></tbody></table>
-                <h5>Blood Registry</h5>
-                <table class="custom-table" id="adminBloodRegTable"><thead><tr><th>Donor</th><th>Action</th></tr></thead><tbody></tbody></table>
-                <h5>Rishta Services</h5>
-                <table class="custom-table" id="adminRishtaRegTable"><thead><tr><th>Profile</th><th>Action</th></tr></thead><tbody></tbody></table>
+                <h4>📞 3. Manage Emergency Numbers</h4>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <input type="text" id="admEmeName" placeholder="Naam">
+                    <input type="text" id="admEmeRole" placeholder="Auhda (e.g. Lineman)">
+                    <input type="text" id="admEmeContact" placeholder="Phone Number">
+                    <button class="btn" onclick="addEmergencyContact()">Add</button>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h4>🏆 4. Add Event to Calendar</h4>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="admEvtTitle" placeholder="Event Name">
+                    <input type="text" id="admEvtDate" placeholder="Date/Time">
+                    <input type="text" id="admEvtLoc" placeholder="Location">
+                    <button class="btn" onclick="addCalendarEvent()">Add Event</button>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h4>💼 5. Post a New Job / Rozgar</h4>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="admJobTitle" placeholder="Job Role">
+                    <input type="text" id="admJobComp" placeholder="Factory / Company">
+                    <input type="text" id="admJobSal" placeholder="Salary">
+                    <input type="text" id="admJobCont" placeholder="Contact Details">
+                    <button class="btn" onclick="addNewJob()">Post Job</button>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h4>💰 6. Manage Committee Records</h4>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="admComName" placeholder="Committee Name">
+                    <input type="text" id="admComTotal" placeholder="Total Raqam">
+                    <input type="text" id="admComMonth" placeholder="Monthly Installment">
+                    <input type="text" id="admComWin" placeholder="Current Winner Name">
+                    <button class="btn" onclick="addCommitteeRecord()">Save</button>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h4>🗑️ 7. Clean/Delete Database Lists</h4>
+                <h5>Gallery Photos</h5><table class="custom-table" id="admListGallery"><tbody></tbody></table>
+                <h5>Emergency Directory</h5><table class="custom-table" id="admListEmergency"><tbody></tbody></table>
+                <h5>Kisaan OLX Ads</h5><table class="custom-table" id="admListOlx"><tbody></tbody></table>
+                <h5>Events Calendar</h5><table class="custom-table" id="admListEvents"><tbody></tbody></table>
+                <h5>Jobs List</h5><table class="custom-table" id="admListJobs"><tbody></tbody></table>
+                <h5>Committee Tracker</h5><table class="custom-table" id="admListCommittees"><tbody></tbody></table>
             </div>
         </section>
 
-    </div>
-
-    <!-- Floating Bubble -->
-    <div class="floating-whatsapp" onclick="window.open('https://wa.me/393297697888', '_blank')">
-        <svg viewBox="0 0 32 32"><path d="M16 2a14 14 0 0 0-12.1 21L2 29l6.2-1.6A14 14 0 1 0 16 2zm8 19.3c-.3.8-1.5 1.5-2.2 1.6-.6.1-1.3.2-3.8-.8a17 17 0 0 1-7-6.1c-.9-1.2-1.4-2.7-1.4-4.2a4.4 4.4 0 0 1 1.4-3.3c.3-.3.6-.4.9-.4h.6c.2 0 .4 0 .6.5.2.6.8 2 1 2.3s.2.5 0 .8c-.2.3-.3.5-.5.7s-.4.4-.2.7a10 10 0 0 0 4 3.6c.6.3 1 .3 1.3 0s.7-.8 1-1.2c.2-.3.5-.3.8-.2s1.7.8 2 1.3c.3.1.5.2.6.3a2 2 0 0 1-.4 1.3z"/></svg>
     </div>
 
     <footer>
