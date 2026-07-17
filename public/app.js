@@ -1,7 +1,6 @@
 const globalWhatsAppNumber = "393297697888";
 
 window.addEventListener('DOMContentLoaded', () => {
-    // Apply Dark Theme Preference
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark-theme');
         document.getElementById('themeBtn').innerHTML = "☀️ Light Mode";
@@ -22,7 +21,6 @@ function toggleDarkMode() {
     }
 }
 
-// Global API Helper to Fetch Data
 async function fetchAPI(endpoint) {
     try {
         const res = await fetch(`/api/${endpoint}`);
@@ -35,7 +33,17 @@ async function fetchAPI(endpoint) {
 
 // ---------------------- RENDERING ENGINE ----------------------
 async function renderSite() {
-    // 1. Announcements
+    // Top Ticker Notice Loader
+    try {
+        const noticeRes = await fetch('/api/notice');
+        const noticeData = await noticeRes.json();
+        document.getElementById('liveNotice').innerText = noticeData.notice || "Welcome to Kohlowala Portal";
+        if (document.getElementById('adminNoticeInput')) {
+            document.getElementById('adminNoticeInput').value = noticeData.notice || "";
+        }
+    } catch (e) { console.error(e); }
+
+    // Announcements
     const activeAilaans = await fetchAPI('announcements');
     const ailaanDiv = document.getElementById('activeAilaanContainer');
     ailaanDiv.innerHTML = activeAilaans.length === 0 ? '<div class="info-card">Abhi koi naya ailaan nahi hai.</div>' : '';
@@ -48,7 +56,7 @@ async function renderSite() {
             </div>`;
     });
 
-    // 2. Livestock Mandi
+    // Livestock Mandi
     const animals = await fetchAPI('livestock');
     const livestockDiv = document.getElementById('livestockContainer');
     livestockDiv.innerHTML = animals.length === 0 ? '<p>Mandi khali hai.</p>' : '';
@@ -67,7 +75,7 @@ async function renderSite() {
             </div>`;
     });
 
-    // 3. Doctors Schedulers
+    // Doctors Schedulers
     const docs = await fetchAPI('doctors');
     const dt = document.getElementById('doctorTable').getElementsByTagName('tbody')[0];
     dt.innerHTML = '';
@@ -81,7 +89,7 @@ async function renderSite() {
         </tr>`;
     });
 
-    // 4. Rent Tools
+    // Rent Tools
     const rent = await fetchAPI('rent');
     const rt = document.getElementById('rentTable').getElementsByTagName('tbody')[0];
     rt.innerHTML = '';
@@ -94,7 +102,7 @@ async function renderSite() {
         </tr>`;
     });
 
-    // 5. Cargo loader
+    // Cargo loader
     const cargoList = await fetchAPI('cargo');
     const ct = document.getElementById('cargoTable').getElementsByTagName('tbody')[0];
     ct.innerHTML = '';
@@ -108,7 +116,7 @@ async function renderSite() {
         </tr>`;
     });
 
-    // 6. Tubewell
+    // Tubewell
     const tubewells = await fetchAPI('tubewells');
     const tt = document.getElementById('tubewellTable').getElementsByTagName('tbody')[0];
     tt.innerHTML = '';
@@ -120,7 +128,7 @@ async function renderSite() {
         </tr>`;
     });
 
-    // 7. Blood
+    // Blood Donors
     const blood = await fetchAPI('blood');
     const bt = document.getElementById('bloodTable').getElementsByTagName('tbody')[0];
     bt.innerHTML = '';
@@ -133,7 +141,7 @@ async function renderSite() {
         </tr>`;
     });
 
-    // 8. Rishta
+    // Rishta
     const rishtas = await fetchAPI('rishta');
     const rst = document.getElementById('rishtaTable').getElementsByTagName('tbody')[0];
     rst.innerHTML = '';
@@ -147,10 +155,44 @@ async function renderSite() {
             <td><a href="https://wa.me/${r.contact.replace(/[^0-9]/g, '')}" target="_blank" class="btn btn-wa" style="padding:4px 8px; font-size:12px;">Chat</a></td>
         </tr>`;
     });
+
+    // Mandi Rates
+    const mandiData = await fetchAPI('mandi');
+    const mt = document.getElementById('mandiTable').getElementsByTagName('tbody')[0];
+    mt.innerHTML = '';
+    mandiData.forEach(m => {
+        mt.innerHTML += `<tr>
+            <td><strong>${m.crop}</strong></td>
+            <td><span class="badge-gender">${m.gov}</span></td>
+            <td><span class="badge-blood">${m.market}</span></td>
+        </tr>`;
+    });
+
+    // Weather Advice
+    try {
+        const weatherRes = await fetch('/api/weather');
+        const weatherData = await weatherRes.json();
+        document.getElementById('weatherAdviceBox').innerText = weatherData.weather;
+    } catch (e) { console.error(e); }
+
+    // Handi-Craft Store
+    const products = await fetchAPI('products');
+    const storeDiv = document.getElementById('storeContainer');
+    storeDiv.innerHTML = '';
+    products.forEach(p => {
+        storeDiv.innerHTML += `
+            <div class="store-card">
+                <div class="store-img" style="background-image: url('${p.img}');"></div>
+                <div class="store-info">
+                    <h4>${p.title}</h4>
+                    <span class="store-price">${p.price}</span>
+                    <a href="https://wa.me/${globalWhatsAppNumber}?text=Salam, mujhe ye kapra pasand aya hai: ${p.title}" target="_blank" class="btn btn-wa" style="font-size:13px; padding:6px 12px;">WhatsApp Order</a>
+                </div>
+            </div>`;
+    });
 }
 
 // ---------------------- SUBMISSION HANDLERS ----------------------
-
 async function submitAnnouncement(event) {
     event.preventDefault();
     const type = document.getElementById('aType').value;
@@ -162,7 +204,6 @@ async function submitAnnouncement(event) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type, sender, msg })
     });
-
     document.getElementById('aSender').value = '';
     document.getElementById('aMsg').value = '';
     alert("Ailaan admin approval ke liye bhej diya gaya!");
@@ -285,7 +326,6 @@ async function addUserRishta(event) {
 }
 
 // ---------------------- ADMIN DASHBOARD WORKFLOWS ----------------------
-
 function loginAdmin() {
     const email = prompt("Admin Gmail enter karein:");
     if (email === "Juttsarkar7466@gmail.com") {
@@ -303,8 +343,20 @@ function logoutAdmin() {
     document.getElementById('adminPanel').style.display = "none";
 }
 
+async function updateNotice() {
+    const newNotice = document.getElementById('adminNoticeInput').value;
+    if (!newNotice) return alert("Notice khali nahi ho sakta!");
+    
+    await fetch('/api/notice', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ notice: newNotice })
+    });
+    alert("Ticker Notice Update Ho Gaya!");
+    renderSite();
+}
+
 async function renderAdminPanelLists() {
-    // 1. Pending Announcements
     const pending = await fetchAPI('admin/pending');
     const act = document.getElementById('adminAnnouncementsTable').getElementsByTagName('tbody')[0];
     act.innerHTML = '';
@@ -320,7 +372,6 @@ async function renderAdminPanelLists() {
         </tr>`;
     });
 
-    // 2. Complaints
     const complaints = await fetchAPI('admin/complaints');
     const acc = document.getElementById('adminComplaintsTable').getElementsByTagName('tbody')[0];
     acc.innerHTML = '';
@@ -332,7 +383,6 @@ async function renderAdminPanelLists() {
         </tr>`;
     });
 
-    // 3. Tubewell Schedule
     const tubewells = await fetchAPI('tubewells');
     const att = document.getElementById('adminTubewellTable').getElementsByTagName('tbody')[0];
     att.innerHTML = '';
@@ -343,7 +393,6 @@ async function renderAdminPanelLists() {
         </tr>`;
     });
 
-    // 4. Doctors
     const docs = await fetchAPI('doctors');
     const adt = document.getElementById('adminDoctorTable').getElementsByTagName('tbody')[0];
     adt.innerHTML = '';
@@ -354,7 +403,6 @@ async function renderAdminPanelLists() {
         </tr>`;
     });
 
-    // 5. Rent Items
     const rent = await fetchAPI('rent');
     const art = document.getElementById('adminRentTable').getElementsByTagName('tbody')[0];
     art.innerHTML = '';
@@ -365,7 +413,6 @@ async function renderAdminPanelLists() {
         </tr>`;
     });
 
-    // 6. Cargo
     const cargo = await fetchAPI('cargo');
     const acg = document.getElementById('adminCargoTable').getElementsByTagName('tbody')[0];
     acg.innerHTML = '';
@@ -376,7 +423,6 @@ async function renderAdminPanelLists() {
         </tr>`;
     });
 
-    // 7. Livestock
     const animals = await fetchAPI('livestock');
     const amg = document.getElementById('adminLivestockTable').getElementsByTagName('tbody')[0];
     amg.innerHTML = '';
@@ -387,7 +433,6 @@ async function renderAdminPanelLists() {
         </tr>`;
     });
 
-    // 8. Blood Registry
     const blood = await fetchAPI('blood');
     const abt = document.getElementById('adminBloodRegTable').getElementsByTagName('tbody')[0];
     abt.innerHTML = '';
@@ -395,7 +440,6 @@ async function renderAdminPanelLists() {
         abt.innerHTML += `<tr><td><strong>${b.name}</strong></td><td><button class="admin-btn-del" onclick="deleteItem('blood', '${b._id}')">Delete</button></td></tr>`;
     });
 
-    // 9. Rishta Registry
     const rishta = await fetchAPI('rishta');
     const arr = document.getElementById('adminRishtaRegTable').getElementsByTagName('tbody')[0];
     arr.innerHTML = '';
