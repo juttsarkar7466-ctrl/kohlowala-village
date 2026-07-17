@@ -1,1 +1,0 @@
-# kohlowala-village
