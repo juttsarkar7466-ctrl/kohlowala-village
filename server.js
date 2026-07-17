@@ -1,129 +1,110 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// Static Files Serve (public folder se HTML/CSS/JS uthayega)
 app.use(express.static('public'));
 
-// Local In-Memory Database (Taake bina MongoDB ke 100% error-free chale)
-let db = {
-  notice: "📢 Ailaan-e-Aam: Kal subah 9:00 baje se dopehar 12:00 baje tak pani ki supply band rahegi. Khasoosi Kisaan Card aur BISP ke naye forms aa chuke hain, jald apply karein!",
-  weather: "Sunehri dhaan (Chawal) ki kasht ke liye pani ka munasib istamal karein. Agle do din barish ka koi imkaan nahi.",
-  doctors: [
-    { _id: "doc1", name: "Dr. Muhammad Yasir", spec: "General Physician", time: "Mon, Wed, Fri (4 PM - 7 PM)", fees: "Free", contact: "03001234567" },
-    { _id: "doc2", name: "Dr. Amna Jutt", spec: "Gynecologist", time: "Daily (10 AM - 1 PM)", fees: "Rs. 300", contact: "03217654321" }
-  ],
-  rent: [
-    { _id: "rent1", owner: "Sardar Ali Raza", item: "Massey Ferguson Tractor", price: "Rs. 1,500/hour", contact: "03123456789" },
-    { _id: "rent2", owner: "Zafar Cheema", item: "Wheat Thresher", price: "Rs. 3,000/day", contact: "03019876543" }
-  ],
-  cargo: [
-    { _id: "cargo1", owner: "Boota Loader", vehicle: "Chingchi Rickshaw (Loader)", rates: "Rs. 500 per trip (Shehar tak)", route: "Kohlowala se Gujranwala Mandi", contact: "03451234567" }
-  ],
-  livestock: [
-    { _id: "live1", type: "Bakri (Goat)", breed: "Kamori", price: "Rs. 45,000", owner: "Karamat Ali", contact: "03001234567", desc: "Ghar ki pali hui bakri, bilkul tandurust hai." }
-  ],
-  blood: [
-    { _id: "blood1", name: "Ali Raza Jutt", group: "O+", age: "24", contact: "+393297697888" }
-  ],
-  rishta: [
-    { _id: "rish1", name: "Asif Jutt", gender: "Larka (Male)", age: "28", caste: "Jutt", job: "Business (Gujranwala)", contact: "+393297697888" }
-  ],
-  tubewells: [
-    { _id: "tube1", zone: "Zone A (Mashriqi Khet)", time: "Solar: 9:00 AM - 1:00 PM", status: "Active" },
-    { _id: "tube2", zone: "Zone B (Maghribi Arazi)", time: "Solar: 1:00 PM - 4:00 PM", status: "Active" }
-  ],
-  complaints: [
-    { _id: "comp1", cat: "Bijli (Electricity)", desc: "Main Transformer se oil leak ho raha hai jis ki waja se light bar bar band ho rahi hai." }
-  ],
-  announcements: [
-    { _id: "ann1", type: "Pani Bandish", msg: "Masjid ke bore ki murammat ki waja se aaj shaam ka paani thora dair se aayega.", sender: "Panchayat", approved: true }
-  ],
-  mandi: [
-    { _id: "m1", crop: "Gandum (Wheat)", gov: "Rs. 3,900", market: "Rs. 4,100" },
-    { _id: "m2", crop: "Chawal (Basmati Paddy)", gov: "Rs. 7,200", market: "Rs. 7,500" }
-  ],
-  products: [
-    { _id: "p1", title: "Nafees Dasti Karhai Suit", price: "Rs. 4,500", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80" }
-  ]
+// 🔌 MongoDB Connection
+const MONGO_URI = process.env.MONGO_URI;
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('🔥 Connected to MongoDB Atlas!'))
+  .catch(err => console.error('❌ MongoDB Connection Error:', err));
+
+// 📝 --- EXISTING & NEW MONGOOSE SCHEMAS ---
+const Notice = mongoose.model('Notice', new mongoose.Schema({ notice: String }));
+const Doctor = mongoose.model('Doctor', new mongoose.Schema({ name: String, spec: String, time: String, fees: String, contact: String }));
+const Rent = mongoose.model('Rent', new mongoose.Schema({ owner: String, item: String, price: String, contact: String }));
+const Cargo = mongoose.model('Cargo', new mongoose.Schema({ owner: String, vehicle: String, rates: String, route: String, contact: String }));
+const Livestock = mongoose.model('Livestock', new mongoose.Schema({ type: String, breed: String, price: String, owner: String, contact: String, desc: String }));
+const Blood = mongoose.model('Blood', new mongoose.Schema({ name: String, group: String, age: String, contact: String }));
+const Rishta = mongoose.model('Rishta', new mongoose.Schema({ name: String, gender: String, age: String, caste: String, job: String, contact: String }));
+const Tubewell = mongoose.model('Tubewell', new mongoose.Schema({ zone: String, time: String, status: { type: String, default: 'Active' } }));
+const Complaint = mongoose.model('Complaint', new mongoose.Schema({ cat: String, desc: String, date: { type: Date, default: Date.now } }));
+const Announcement = mongoose.model('Announcement', new mongoose.Schema({ type: String, msg: String, sender: String, approved: { type: Boolean, default: false } }));
+
+// 🌟 NEW SELECTED FEATURES SCHEMAS
+const Gallery = mongoose.model('Gallery', new mongoose.Schema({ title: String, imgUrl: String, date: { type: Date, default: Date.now } }));
+const Emergency = mongoose.model('Emergency', new mongoose.Schema({ name: String, role: String, contact: String }));
+const Olx = mongoose.model('Olx', new mongoose.Schema({ title: String, price: String, owner: String, contact: String, desc: String }));
+const Poll = mongoose.model('Poll', new mongoose.Schema({ question: String, yesVotes: { type: Number, default: 0 }, noVotes: { type: Number, default: 0 }, active: { type: Boolean, default: true } }));
+const Event = mongoose.model('Event', new mongoose.Schema({ title: String, date: String, location: String }));
+const Hunar = mongoose.model('Hunar', new mongoose.Schema({ name: String, skill: String, contact: String }));
+const Job = mongoose.model('Job', new mongoose.Schema({ title: String, company: String, salary: String, contact: String }));
+const Chat = mongoose.model('Chat', new mongoose.Schema({ username: String, msg: String, date: { type: Date, default: Date.now } }));
+const Committee = mongoose.model('Committee', new mongoose.Schema({ name: String, total: String, monthly: String, winner: String }));
+
+// 🚀 --- API ROUTES ---
+const makeRoute = (path, Model) => {
+  app.get(`/api/${path}`, async (req, res) => res.json(await Model.find()));
+  app.post(`/api/${path}`, async (req, res) => res.json(await Model.create(req.body)));
 };
 
-// Unique ID Generator Helper
-const generateId = () => '_' + Math.random().toString(36).substr(2, 9);
+// Auto Generating CRUD Endpoints
+makeRoute('doctors', Doctor); makeRoute('rent', Rent); makeRoute('cargo', Cargo);
+makeRoute('livestock', Livestock); makeRoute('blood', Blood); makeRoute('rishta', Rishta);
+makeRoute('tubewells', Tubewell); makeRoute('gallery', Gallery); makeRoute('emergency', Emergency);
+makeRoute('olx', Olx); makeRoute('events', Event); makeRoute('hunar', Hunar);
+makeRoute('jobs', Job); makeRoute('committees', Committee);
 
-// --- API ROUTES ---
-
-// Notice & Weather APIs
-app.get('/api/notice', (req, res) => res.json({ notice: db.notice }));
-app.put('/api/notice', (req, res) => {
-  db.notice = req.body.notice;
-  res.json({ success: true, notice: db.notice });
-});
-app.get('/api/weather', (req, res) => res.json({ weather: db.weather }));
-app.get('/api/mandi', (req, res) => res.json(db.mandi));
-app.get('/api/products', (req, res) => res.json(db.products));
-
-// Generic Routes Configuration
-const setupRoutes = (routePath, collectionName) => {
-  app.get(`/api/${routePath}`, (req, res) => res.json(db[collectionName]));
-  app.post(`/api/${routePath}`, (req, res) => {
-    const newItem = { _id: generateId(), ...req.body };
-    db[collectionName].push(newItem);
-    res.json(newItem);
-  });
-};
-
-setupRoutes('doctors', 'doctors');
-setupRoutes('rent', 'rent');
-setupRoutes('cargo', 'cargo');
-setupRoutes('livestock', 'livestock');
-setupRoutes('blood', 'blood');
-setupRoutes('rishta', 'rishta');
-setupRoutes('tubewells', 'tubewells');
-
-// Announcements Handling
-app.get('/api/announcements', (req, res) => {
-  res.json(db.announcements.filter(a => a.approved === true));
-});
-app.post('/api/announcements', (req, res) => {
-  const newAnn = { _id: generateId(), ...req.body, approved: false };
-  db.announcements.push(newAnn);
-  res.json({ message: "Pending Approval" });
-});
-app.get('/api/admin/pending', (req, res) => {
-  res.json(db.announcements.filter(a => a.approved === false));
-});
-app.put('/api/admin/approve/:id', (req, res) => {
-  const ann = db.announcements.find(a => a._id === req.params.id);
-  if (ann) ann.approved = true;
-  res.json({ success: true });
+// Notice Ticker
+app.get('/api/notice', async (req, res) => res.json(await Notice.findOne() || { notice: "Welcome to Kohlowala Portal" }));
+app.put('/api/notice', async (req, res) => {
+  let data = await Notice.findOne();
+  if (data) { data.notice = req.body.notice; await data.save(); }
+  else { data = await Notice.create({ notice: req.body.notice }); }
+  res.json({ success: true, notice: data.notice });
 });
 
-// Complaints Handling
-app.post('/api/complaints', (req, res) => {
-  const newComp = { _id: generateId(), ...req.body, date: new Date() };
-  db.complaints.push(newComp);
-  res.json({ success: true });
+// Panchayat Voting Poll Logic
+app.get('/api/polls', async (req, res) => res.json(await Poll.findOne({ active: true }) || { question: "Abhi koi poll active nahi hai.", yesVotes: 0, noVotes: 0 }));
+app.post('/api/admin/polls', async (req, res) => {
+  await Poll.updateMany({}, { active: false }); // Purane polls close
+  res.json(await Poll.create({ question: req.body.question }));
 });
-app.get('/api/admin/complaints', (req, res) => res.json(db.complaints));
-
-// Admin Global Delete API
-app.delete('/api/admin/:collection/:id', (req, res) => {
-  const { collection, id } = req.params;
-  let target = collection;
-  if (collection === 'pendingAnnouncements' || collection === 'activeAnnouncements') target = 'announcements';
-
-  if (db[target]) {
-    db[target] = db[target].filter(item => item._id !== id);
-    res.json({ success: true });
-  } else {
-    res.status(400).json({ error: "Invalid collection" });
+app.post('/api/polls/vote', async (req, res) => {
+  const { type } = req.body;
+  const currentPoll = await Poll.findOne({ active: true });
+  if (currentPoll) {
+    if (type === 'yes') currentPoll.yesVotes += 1;
+    else currentPoll.noVotes += 1;
+    await currentPoll.save();
+    return res.json(currentPoll);
   }
+  res.status(400).json({ error: "No active poll" });
+});
+
+// Chatroom Logic (REST Polling for heavy performance optimization on Render)
+app.get('/api/chat', async (req, res) => res.json(await Chat.find().sort({ date: -1 }).limit(15)));
+app.post('/api/chat', async (req, res) => res.json(await Chat.create(req.body)));
+
+// Announcements & Complaints
+app.get('/api/announcements', async (req, res) => res.json(await Announcement.find({ approved: true })));
+app.post('/api/announcements', async (req, res) => res.json(await Announcement.create({ ...req.body, approved: false })));
+app.get('/api/admin/pending', async (req, res) => res.json(await Announcement.find({ approved: false })));
+app.put('/api/admin/approve/:id', async (req, res) => res.json(await Announcement.findByIdAndUpdate(req.params.id, { approved: true })));
+app.post('/api/complaints', async (req, res) => res.json(await Complaint.create(req.body)));
+app.get('/api/admin/complaints', async (req, res) => res.json(await Complaint.find().sort({ date: -1 })));
+
+// Mandi, Products & Weather Static Fallbacks
+app.get('/api/mandi', (req, res) => res.json([{ crop: "Gandum", gov: "Rs. 3,900", market: "Rs. 4,100" }, { crop: "Basmati Paddy", gov: "Rs. 7,200", market: "Rs. 7,500" }]));
+app.get('/api/products', (req, res) => res.json([{ title: "Dasti Karhai Suit", price: "Rs. 4,500", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80" }]));
+app.get('/api/weather', (req, res) => res.json({ weather: "Kohlowala ka mosam agle do din tak bilkul saaf rahega." }));
+
+// Global Delete Mapping for Dashboard Control
+const modelsMap = {
+  doctors: Doctor, rent: Rent, cargo: Cargo, livestock: Livestock, blood: Blood, rishta: Rishta,
+  tubewells: Tubewell, complaints: Complaint, pendingAnnouncements: Announcement,
+  gallery: Gallery, emergency: Emergency, olx: Olx, events: Event, hunar: Hunar, jobs: Job, committees: Committee
+};
+app.delete('/api/admin/:collection/:id', async (req, res) => {
+  const Model = modelsMap[req.params.collection];
+  if (Model) { await Model.findByIdAndDelete(req.params.id); res.json({ success: true }); }
+  else res.status(400).json({ error: "Invalid entity type" });
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running smoothly on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Kohlowala Portal online on port ${PORT}`));
