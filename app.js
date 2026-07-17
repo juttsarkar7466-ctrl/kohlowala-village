@@ -394,7 +394,8 @@ function loginAdmin() {
     const email = prompt("Admin Gmail enter karein:");
     if (email === "Juttsarkar7466@gmail.com") {
         const password = prompt("Admin Password enter karein:");
-        if (password === 'ZAQ!"WSXCDE£$RFV4321z') {
+        // Naya Password Yahan Set Kiya Hai
+        if (password === 'ZAQ!"wsx£$RFVCDE') {
             document.getElementById('adminPanel').style.display = "block";
             renderAdminPanelLists();
             document.getElementById('adminPanel').scrollIntoView();
