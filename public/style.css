@@ -1,0 +1,176 @@
+/* Base Styling & Theme Variables */
+:root {
+    --primary: #2c4c38;
+    --accent: #dfb15b;
+    --light-bg: #ffffff;
+    --body-bg: #f3f6f3;
+    --text-color: #333333;
+    --card-bg: #ffffff;
+    --border-color: #dddddd;
+    --danger: #d9534f;
+    --success: #25D366;
+    --admin-bg: #eef2ef;
+}
+
+/* Dark Mode Override Variables */
+.dark-theme {
+    --primary: #1b3023;
+    --accent: #f0c265;
+    --light-bg: #1e1e1e;
+    --body-bg: #121212;
+    --text-color: #f5f5f5;
+    --card-bg: #1e1e1e;
+    --border-color: #333333;
+    --admin-bg: #252525;
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    transition: background-color 0.25s, color 0.25s; 
+}
+
+body { 
+    background-color: var(--body-bg); 
+    color: var(--text-color); 
+    line-height: 1.6; 
+}
+
+html { 
+    scroll-behavior: smooth; 
+}
+
+/* Top Scrolling Notice Bar */
+.notice-bar {
+    background-color: var(--accent);
+    color: #1b3023;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 15px;
+    border-bottom: 2px solid var(--primary);
+}
+.notice-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 25s linear infinite;
+}
+@keyframes marquee {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
+}
+
+/* Navigation Header */
+header { 
+    background-color: var(--primary); 
+    color: white; 
+    padding: 15px 20px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    position: sticky; 
+    top: 0; 
+    z-index: 999; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.logo { font-size: 22px; font-weight: bold; color: var(--accent); }
+nav { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+nav a { color: white; text-decoration: none; font-weight: 500; transition: 0.3s; }
+nav a:hover { color: var(--accent); }
+
+/* Theme Toggle Switch */
+.theme-toggle-btn {
+    background-color: var(--accent);
+    color: #1b3023;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* Hero Section */
+.hero { 
+    background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=1200&q=80') center/cover; 
+    height: 35vh; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    color: white; 
+    text-align: center; 
+    padding: 20px; 
+}
+.hero h1 { font-size: 36px; margin-bottom: 10px; color: var(--accent); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+.hero p { font-size: 17px; max-width: 600px; }
+
+/* Main Container */
+.container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+section { margin-bottom: 50px; background: var(--card-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+h2 { color: var(--primary); border-bottom: 3px solid var(--accent); display: inline-block; padding-bottom: 5px; margin-bottom: 25px; }
+.dark-theme h2 { color: var(--accent); }
+
+/* Grids */
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+
+/* Forms */
+.form-box { background: var(--body-bg); border: 1px solid var(--border-color); padding: 25px; border-radius: 10px; margin-bottom: 20px; }
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; color: var(--primary); }
+.dark-theme label { color: var(--accent); }
+input, select, textarea { width: 100%; padding: 10px; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 6px; font-size: 15px; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+
+/* Buttons */
+.btn { background-color: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 15px; text-decoration: none; display: inline-block; text-align: center; }
+.btn:hover { opacity: 0.9; }
+.btn-wa { background-color: var(--success); color: white; }
+.btn-wa:hover { opacity: 0.9; }
+
+/* Cards & Info Boxes */
+.info-card { background: var(--body-bg); border-left: 5px solid var(--accent); padding: 18px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+.info-card h3 { color: var(--primary); margin-bottom: 8px; }
+.dark-theme .info-card h3 { color: var(--accent); }
+
+/* Tables */
+.custom-table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 15px; background: var(--card-bg); }
+.custom-table th, .custom-table td { border: 1px solid var(--border-color); padding: 12px; text-align: left; }
+.custom-table th { background-color: var(--primary); color: white; }
+.badge-blood { background: #ffebeb; color: #cc0000; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+.badge-gender { background: #ebf3ff; color: #0044cc; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+
+/* Handi-Craft Store */
+.store-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.store-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.store-img { width: 100%; height: 200px; background-size: cover; background-position: center; background-color: #ddd; }
+.store-info { padding: 15px; text-align: center; }
+.store-info h4 { color: var(--primary); margin-bottom: 5px; }
+.dark-theme .store-info h4 { color: var(--accent); }
+.store-price { font-weight: bold; color: var(--danger); margin-bottom: 10px; display: block; }
+
+/* Admin Dashboard CSS */
+#adminPanel { display: none; background: var(--admin-bg); border: 3px dashed var(--primary); padding: 30px; border-radius: 12px; margin-top: 50px; }
+.admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px; }
+.admin-section { background: var(--card-bg); padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
+.admin-section h4 { color: var(--primary); margin-bottom: 15px; border-left: 4px solid var(--accent); padding-left: 10px; }
+.dark-theme .admin-section h4 { color: var(--accent); }
+.admin-btn-del { background-color: var(--danger); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; margin-right: 5px; }
+.admin-btn-approve { background-color: var(--success); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+
+/* Floating WhatsApp Quick Bubble */
+.floating-whatsapp {
+    position: fixed; bottom: 30px; right: 30px; background-color: var(--success);
+    color: white; width: 60px; height: 60px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000; cursor: pointer; transition: 0.3s;
+}
+.floating-whatsapp svg { width: 35px; height: 35px; fill: white; }
+
+/* Footer Styling */
+footer { background-color: var(--primary); color: white; text-align: center; padding: 35px; margin-top: 50px; }
+.admin-login-link { color: var(--accent); text-decoration: none; font-weight: bold; cursor: pointer; display: inline-block; margin-top: 10px; }
