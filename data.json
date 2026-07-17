@@ -1,0 +1,42 @@
+{
+  "notice": "📢 Ailaan-e-Aam: Kal subah 9:00 baje se dopehar 12:00 baje tak pani ki supply band rahegi. Khasoosi Kisaan Card aur BISP ke naye forms aa chuke hain, jald apply karein!",
+  "weather": "Sunehri dhaan (Chawal) ki kasht ke liye pani ka munasib istamal karein. Agle do din barish ka koi imkaan nahi.",
+  "doctors": [
+    { "id": 1, "name": "Dr. Muhammad Yasir", "spec": "General Physician", "time": "Mon, Wed, Fri (4 PM - 7 PM)", "fees": "Free", "contact": "03001234567" },
+    { "id": 2, "name": "Dr. Amna Jutt", "spec": "Gynecologist", "time": "Daily (10 AM - 1 PM)", "fees": "Rs. 300", "contact": "03217654321" }
+  ],
+  "rent": [
+    { "id": 1, "owner": "Sardar Ali Raza", "item": "Massey Ferguson Tractor", "price": "Rs. 1,500/hour", "contact": "03123456789" },
+    { "id": 2, "owner": "Zafar Cheema", "item": "Wheat Thresher", "price": "Rs. 3,000/day", "contact": "03019876543" }
+  ],
+  "tubewells": [
+    { "id": 1, "zone": "Zone A (Mashriqi Khet)", "time": "Solar: 9:00 AM - 1:00 PM", "status": "Active" },
+    { "id": 2, "zone": "Zone B (Maghribi Arazi)", "time": "Solar: 1:00 PM - 4:00 PM", "status": "Active" }
+  ],
+  "complaints": [
+    { "id": 1, "cat": "Bijli (Electricity)", "desc": "Main Transformer se oil leak ho raha hai jis ki waja se light bar bar band ho rahi hai." }
+  ],
+  "blood": [
+    { "id": 1, "name": "Ali Raza Jutt", "group": "O+", "age": "24", "contact": "+393297697888" }
+  ],
+  "rishta": [
+    { "id": 1, "name": "Asif Jutt", "gender": "Larka (Male)", "age": "28", "caste": "Jutt", "job": "Business (Gujranwala)", "contact": "+393297697888" }
+  ],
+  "mandi": [
+    { "id": 1, "crop": "Gandum (Wheat)", "gov": "Rs. 3,900", "market": "Rs. 4,100" },
+    { "id": 2, "crop": "Chawal (Basmati Paddy)", "gov": "Rs. 7,200", "market": "Rs. 7,500" }
+  ],
+  "products": [
+    { "id": 1, "title": "Nafees Dasti Karhai Suit", "price": "Rs. 4,500", "img": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80" }
+  ],
+  "activeAnnouncements": [
+    { "id": 1, "type": "Pani Bandish", "msg": "Masjid ke bore ki murammat ki waja se aaj shaam ka paani thora dair se aayega.", "sender": "Panchayat" }
+  ],
+  "pendingAnnouncements": [],
+  "livestock": [
+    { "id": 1, "type": "Bakri (Goat)", "breed": "Kamori", "price": "Rs. 45,000", "owner": "Karamat Ali", "contact": "03001234567", "desc": "Ghar ki pali hui bakri, bilkul tandurust hai." }
+  ],
+  "cargo": [
+    { "id": 1, "owner": "Boota Loader", "vehicle": "Chingchi Rickshaw (Loader)", "rates": "Rs. 500 per trip (Shehar tak)", "route": "Kohlowala se Gujranwala Mandi", "contact": "03451234567" }
+  ]
+}
