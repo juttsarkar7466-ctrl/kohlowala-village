@@ -3,50 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kohlowala Village Portal - Gujranwala</title>
+    <title>Kohlowala Village Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="notice-bar"><div class="notice-content" id="liveNotice">Loading website updates...</div></div>
+    <div class="notice-bar"><div class="notice-content" id="liveNotice">Loading portal data...</div></div>
 
     <header>
         <div class="logo">🌾 Kohlowala</div>
         <nav>
             <a href="#home">Home</a>
             <a href="#gallery">🖼️ Gallery</a>
-            <a href="#emergency">📞 Emergency</a>
-            <a href="#olx">🛒 Kisaan OLX</a>
+            <a href="#masjid">🕌 Masajid</a>
+            <a href="#dairy">🥛 Dairy rates</a>
+            <a href="#carpool">🚗 Lift Do</a>
+            <a href="#emergency">📞 Contacts</a>
+            <a href="#olx">🛒 OLX</a>
             <a href="#polls">🗳️ Voting</a>
-            <a href="#events">🏆 Events</a>
-            <a href="#hunar">🛠️ Hunar</a>
-            <a href="#jobs">💼 Jobs</a>
             <a href="#chat">💬 Chatroom</a>
-            <a href="#committee">💰 Committee</a>
-            <button class="theme-toggle-btn" onclick="toggleDarkMode()" id="themeBtn">🌙 Dark Mode</button>
+            <button class="theme-toggle-btn" onclick="toggleDarkMode()" id="themeBtn">🌙 Dark</button>
             <button class="admin-toggle-btn" onclick="loginAdmin()">🔒 Admin</button>
         </nav>
     </header>
 
     <div class="hero" id="home">
         <h1>Kohlowala Village Portal</h1>
-        <p>Aapka apna digital dehaat platform—jahan community, kisaan, aur khidmat sab aik hi jagah hain.</p>
+        <p>Android aur iPhone par 100% Lock Responsive, Super-Fast Grid Layout.</p>
     </div>
 
     <div class="container">
 
-        <!-- PHOTO GALLERY (Admin Uploads / Users View) -->
+        <!-- PHOTO GALLERY -->
         <section id="gallery">
             <h2>🖼️ Kohlowala Photo Gallery</h2>
             <div class="gallery-grid" id="galleryContainer"></div>
         </section>
 
+        <!-- MOSQUE & NAMAZ ALERTS -->
+        <section id="masjid">
+            <h2>🕌 Masajid Timings & Elaan Alerts</h2>
+            <div id="masjidContainer"></div>
+        </section>
+
+        <!-- DAIRY TRACKER -->
+        <section id="dairy">
+            <h2>🥛 Doodh aur Dairy Tracker (Milk Rate)</h2>
+            <div style="overflow-x:auto;">
+                <table class="custom-table" id="dairyTable">
+                    <thead><tr><th>Dairy / Dukan Name</th><th>Doodh Rate (Ltr)</th><th>Khoya Rate (Kg)</th><th>Subah Time</th><th>Shaam Time</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- LIFT DO / CARPOOLING -->
+        <section id="carpool">
+            <h2>🚗 Lift Do / Carpooling (Pind se Shehar Lift)</h2>
+            <div class="grid-2">
+                <div class="form-box">
+                    <h3>Apni Gari/Bike ki Lift Offer Karein</h3>
+                    <br>
+                    <form onsubmit="submitCarpool(event)">
+                        <div class="form-group"><label>Driver ka Naam</label><input type="text" id="cDriver" required></div>
+                        <div class="form-group"><label>Gari / Bike Model</label><input type="text" id="cVehicle" placeholder="e.g. Honda 125" required></div>
+                        <div class="form-group"><label>Route (Kahan se Kahan)</label><input type="text" id="cRoute" placeholder="e.g. Kohlowala se Gujranwala" required></div>
+                        <div class="form-group"><label>Janay ka Time</label><input type="text" id="cTime" placeholder="e.g. Subah 8:00 AM" required></div>
+                        <div class="form-group"><label>Khali Seats (Gunjaish)</label><input type="text" id="cSeats" placeholder="e.g. 2 bande" required></div>
+                        <div class="form-group"><label>WhatsApp/Phone</label><input type="text" id="cContact" required></div>
+                        <button type="submit" class="btn">Lift Offer Post Karein</button>
+                    </form>
+                </div>
+                <div>
+                    <h3>Active Lifts (Safar Ke Sathi)</h3>
+                    <div id="carpoolContainer"></div>
+                </div>
+            </div>
+        </section>
+
         <!-- EMERGENCY DIRECTORY -->
         <section id="emergency">
-            <h2>📞 Emergency Contact Directory</h2>
+            <h2>📞 Emergency Contacts</h2>
             <div style="overflow-x:auto;">
                 <table class="custom-table" id="emergencyTable">
-                    <thead><tr><th>Naam</th><th>Auhda / Role</th><th>Rabta (Call)</th></tr></thead>
+                    <thead><tr><th>Naam</th><th>Role</th><th>Rabta</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -54,188 +94,113 @@
 
         <!-- KISAAN OLX -->
         <section id="olx">
-            <h2>🛒 Kisaan OLX / Dehati Bazaar</h2>
+            <h2>🛒 Kisaan OLX Bazaar</h2>
             <div class="grid-2">
                 <div class="form-box">
-                    <h3>Apni Cheez Bechne Ke Liye Ad Lagayein</h3>
-                    <br>
+                    <h3>Ad Lagayein</h3>
                     <form onsubmit="submitOlx(event)">
-                        <div class="form-group"><label>Cheez ka Naam</label><input type="text" id="oTitle" placeholder="e.g. Massey Ferguson 2018" required></div>
-                        <div class="form-group"><label>Qeemat (Price)</label><input type="text" id="oPrice" placeholder="e.g. Rs. 1,200,000" required></div>
-                        <div class="form-group"><label>Apna Naam</label><input type="text" id="oOwner" required></div>
-                        <div class="form-group"><label>WhatsApp Number</label><input type="text" id="oContact" required></div>
-                        <div class="form-group"><label>Cheez ki Condition / Details</label><textarea id="oDesc" rows="2" required></textarea></div>
-                        <button type="submit" class="btn">Ad Publish Karein</button>
+                        <div class="form-group"><input type="text" id="oTitle" placeholder="Cheez ka Naam" required></div>
+                        <div class="form-group"><input type="text" id="oPrice" placeholder="Qeemat" required></div>
+                        <div class="form-group"><input type="text" id="oOwner" placeholder="Apna Naam" required></div>
+                        <div class="form-group"><input type="text" id="oContact" placeholder="WhatsApp Number" required></div>
+                        <div class="form-group"><textarea id="oDesc" placeholder="Details" rows="2" required></textarea></div>
+                        <button type="submit" class="btn">Publish Ad</button>
                     </form>
                 </div>
-                <div>
-                    <h3>Bazaar mein Mojood Samaan</h3>
-                    <div id="olxContainer"></div>
-                </div>
+                <div id="olxContainer"></div>
             </div>
         </section>
 
-        <!-- PANCHAYAT VOTING POLLS -->
+        <!-- VOTING SYSTEM -->
         <section id="polls">
-            <h2>🗳️ Panchayat Polls (Voting System)</h2>
-            <div class="info-card" style="border-left-color: var(--primary); text-align: center;">
+            <h2>🗳️ Panchayat Voting Polls</h2>
+            <div class="info-card" style="text-align: center;">
                 <h3 id="pollQuestion">Loading active poll...</h3>
                 <div style="margin: 20px 0; display:flex; justify-content:center; gap:15px;">
-                    <button class="btn btn-wa" onclick="castVote('yes')">👍 Haan (YES)</button>
-                    <button class="btn" style="background-color:var(--danger);" onclick="castVote('no')">👎 Nahi (NO)</button>
+                    <button class="btn btn-wa" onclick="castVote('yes')">👍 Haan</button>
+                    <button class="btn" style="background-color:var(--danger);" onclick="castVote('no')">👎 Nahi</button>
                 </div>
-                <p><strong>Live Results:</strong> Haan: <span id="yesCount">0</span> | Nahi: <span id="noCount">0</span></p>
+                <p>Haan: <span id="yesCount">0</span> | Nahi: <span id="noCount">0</span></p>
             </div>
-        </section>
-
-        <!-- EVENTS CALENDAR -->
-        <section id="events">
-            <h2>🏆 Dehati Khel & Events Calendar</h2>
-            <div style="overflow-x:auto;">
-                <table class="custom-table" id="eventsTable">
-                    <thead><tr><th>Mela / Event Name</th><th>Tareekh (Date)</th><th>Jagah (Location)</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- HUNAR DIRECTORY -->
-        <section id="hunar">
-            <h2>🛠️ Hunar Directory (Local Skills)</h2>
-            <div class="grid-2">
-                <div class="form-box">
-                    <h3>Apna Hunar Register Karein</h3>
-                    <br>
-                    <form onsubmit="submitHunar(event)">
-                        <div class="form-group"><label>Apna Naam</label><input type="text" id="hName" required></div>
-                        <div class="form-group"><label>Hunar (e.g. Plumber, Darzi)</label><input type="text" id="hSkill" required></div>
-                        <div class="form-group"><label>WhatsApp/Phone</label><input type="text" id="hContact" required></div>
-                        <button type="submit" class="btn">Hunar List Karein</button>
-                    </form>
-                </div>
-                <div>
-                    <table class="custom-table" id="hunarTable">
-                        <thead><tr><th>Karigar</th><th>Hunar</th><th>Rabta</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- ROZGAR BOARD -->
-        <section id="jobs">
-            <h2>💼 Rozgar (Local Job Board)</h2>
-            <table class="custom-table" id="jobsTable">
-                <thead><tr><th>Naukri (Job Role)</th><th>Factory/Dukan</th><th>Mahana Tankhwah</th><th>Apply Info</th></tr></thead>
-                <tbody></tbody>
-            </table>
         </section>
 
         <!-- LIVE CHATROOM -->
         <section id="chat">
             <h2>💬 Live Village Chatroom</h2>
-            <p style="font-size:13px; opacity:0.8; margin-bottom:10px;">Bina number share kiye gaon walon se guftagu karein.</p>
-            <div class="form-box" style="background: var(--card-bg);">
-                <div id="chatBox" style="height: 250px; overflow-y: auto; border: 1px solid var(--border-color); padding: 15px; border-radius: 6px; margin-bottom: 15px; background: var(--body-bg);"></div>
+            <div class="form-box">
+                <div id="chatBox"></div>
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="chatUser" placeholder="Apna Naam" style="width: 25%;">
-                    <input type="text" id="chatMsg" placeholder="Message likhein..." style="width: 60%;">
+                    <input type="text" id="chatUser" placeholder="Naam" style="width: 25%;">
+                    <input type="text" id="chatMsg" placeholder="Message..." style="width: 60%;">
                     <button class="btn" onclick="sendChatMessage()" style="width: 15%;">Send</button>
                 </div>
             </div>
         </section>
 
-        <!-- COMMITTEE TRACKER -->
-        <section id="committee">
-            <h2>💰 Gaon Ki Committee Tracker</h2>
-            <table class="custom-table" id="committeeTable">
-                <thead><tr><th>Committee Ka Naam</th><th>Kul Raqam (Total)</th><th>Mahana Qist</th><th>Is Mahine Kiski Nikli?</th></tr></thead>
-                <tbody></tbody>
-            </table>
-        </section>
-
-        <!-- ==================== ADMIN PANEL DASHBOARD ==================== -->
+        <!-- ==================== ADMIN PANEL ==================== -->
         <section id="adminPanel">
             <div class="admin-header">
-                <h3>⚙️ Kohlowala Control Panel (Admin Dashboard)</h3>
+                <h3>⚙️ Admin Dashboard Control Panel</h3>
                 <button class="btn" style="background-color: var(--danger);" onclick="logoutAdmin()">Logout</button>
             </div>
             
             <div class="admin-section">
-                <h4>🖼️ 1. Upload Gallery Photo (Via URL Link)</h4>
+                <h4>🕌 Update Masjid Timings & Elaan</h4>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px; margin-bottom:10px;">
+                    <input type="text" id="adMName" placeholder="Masjid Name">
+                    <input type="text" id="adMFaj" placeholder="Fajar">
+                    <input type="text" id="adMZuh" placeholder="Zuhar">
+                    <input type="text" id="adMAsr" placeholder="Asar">
+                    <input type="text" id="adMMag" placeholder="Maghrib">
+                    <input type="text" id="adMIsh" placeholder="Isha">
+                    <input type="text" id="adMJum" placeholder="Juma Timings">
+                </div>
+                <input type="text" id="adMElaan" placeholder="Masjid ka Elaan (If any)" style="width:100%; margin-bottom:10px;">
+                <button class="btn" onclick="addMasjidRecord()">Save/Update Masjid</button>
+            </div>
+
+            <div class="admin-section">
+                <h4>🥛 Update Dairy Milk Rates</h4>
                 <div style="display:flex; gap:10px;">
-                    <input type="text" id="admGalTitle" placeholder="Photo Ka Title">
-                    <input type="text" id="admGalUrl" placeholder="Paste Image Link / URL">
-                    <button class="btn" onclick="addGalleryPhoto()">Upload Image</button>
+                    <input type="text" id="adDName" placeholder="Dairy Name">
+                    <input type="text" id="adDMilk" placeholder="Milk Rate">
+                    <input type="text" id="adDKhoya" placeholder="Khoya Rate">
+                    <input type="text" id="adDMorn" placeholder="Morning Time">
+                    <input type="text" id="adDEve" placeholder="Evening Time">
+                    <button class="btn" onclick="addDairyRecord()">Save Rate</button>
                 </div>
             </div>
 
             <div class="admin-section">
-                <h4>🗳️ 2. Start a New Panchayat Poll</h4>
+                <h4>🖼️ Upload Gallery Photo Link</h4>
                 <div style="display:flex; gap:10px;">
-                    <input type="text" id="admPollQuestion" placeholder="Enter Question e.g. Kya Gali Pakki Honi Chahye?">
-                    <button class="btn" onclick="startNewPoll()">Launch Poll</button>
+                    <input type="text" id="admGalTitle" placeholder="Title">
+                    <input type="text" id="admGalUrl" placeholder="Image URL URL Link">
+                    <button class="btn" onclick="addGalleryPhoto()">Upload</button>
                 </div>
             </div>
 
             <div class="admin-section">
-                <h4>📞 3. Manage Emergency Numbers</h4>
-                <div style="display:flex; gap:10px; margin-bottom:10px;">
-                    <input type="text" id="admEmeName" placeholder="Naam">
-                    <input type="text" id="admEmeRole" placeholder="Auhda (e.g. Lineman)">
-                    <input type="text" id="admEmeContact" placeholder="Phone Number">
-                    <button class="btn" onclick="addEmergencyContact()">Add</button>
-                </div>
+                <h4>🗳️ Launch Panchayat Poll</h4>
+                <input type="text" id="admPollQuestion" placeholder="Enter Question" style="width:70%;">
+                <button class="btn" onclick="startNewPoll()">Launch</button>
             </div>
 
             <div class="admin-section">
-                <h4>🏆 4. Add Event to Calendar</h4>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="admEvtTitle" placeholder="Event Name">
-                    <input type="text" id="admEvtDate" placeholder="Date/Time">
-                    <input type="text" id="admEvtLoc" placeholder="Location">
-                    <button class="btn" onclick="addCalendarEvent()">Add Event</button>
-                </div>
-            </div>
-
-            <div class="admin-section">
-                <h4>💼 5. Post a New Job / Rozgar</h4>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="admJobTitle" placeholder="Job Role">
-                    <input type="text" id="admJobComp" placeholder="Factory / Company">
-                    <input type="text" id="admJobSal" placeholder="Salary">
-                    <input type="text" id="admJobCont" placeholder="Contact Details">
-                    <button class="btn" onclick="addNewJob()">Post Job</button>
-                </div>
-            </div>
-
-            <div class="admin-section">
-                <h4>💰 6. Manage Committee Records</h4>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="admComName" placeholder="Committee Name">
-                    <input type="text" id="admComTotal" placeholder="Total Raqam">
-                    <input type="text" id="admComMonth" placeholder="Monthly Installment">
-                    <input type="text" id="admComWin" placeholder="Current Winner Name">
-                    <button class="btn" onclick="addCommitteeRecord()">Save</button>
-                </div>
-            </div>
-
-            <div class="admin-section">
-                <h4>🗑️ 7. Clean/Delete Database Lists</h4>
+                <h4>🗑️ Database Cleaner (Remove Lists)</h4>
+                <h5>Masajid</h5><table class="custom-table" id="admListMasjids"><tbody></tbody></table>
+                <h5>Dairies</h5><table class="custom-table" id="admListDairies"><tbody></tbody></table>
+                <h5>Carpool Lifts</h5><table class="custom-table" id="admListCarpools"><tbody></tbody></table>
                 <h5>Gallery Photos</h5><table class="custom-table" id="admListGallery"><tbody></tbody></table>
-                <h5>Emergency Directory</h5><table class="custom-table" id="admListEmergency"><tbody></tbody></table>
-                <h5>Kisaan OLX Ads</h5><table class="custom-table" id="admListOlx"><tbody></tbody></table>
-                <h5>Events Calendar</h5><table class="custom-table" id="admListEvents"><tbody></tbody></table>
-                <h5>Jobs List</h5><table class="custom-table" id="admListJobs"><tbody></tbody></table>
-                <h5>Committee Tracker</h5><table class="custom-table" id="admListCommittees"><tbody></tbody></table>
+                <h5>OLX Ads</h5><table class="custom-table" id="admListOlx"><tbody></tbody></table>
             </div>
         </section>
 
     </div>
 
     <footer>
-        <p>© 2026 Kohlowala Village Portal, Gujranwala | All Rights Reserved</p>
-        <p><span class="admin-login-link" onclick="loginAdmin()">🔒 Admin Control Panel (Login)</span></p>
+        <p>© 2026 Kohlowala Village Portal, Gujranwala | Secure SSL Optimized</p>
+        <span class="admin-login-link" onclick="loginAdmin()">🔒 Control Login</span>
     </footer>
 
     <script src="app.js"></script>
