@@ -1,109 +1,131 @@
 window.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-theme');
-    }
-    loadDataPipeline();
+    fetchMandiRates();
+    loadMainRegistry();
+    setInterval(loadMainRegistry, 5000); // Reactive update matrix
 });
 
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-theme');
-    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
-}
-
-// Global state fetcher
-async function loadDataPipeline() {
+async function fetchMandiRates() {
     try {
-        const res = await fetch('/api/all-data');
+        const res = await fetch('/api/live-mandi');
         const data = await res.json();
-        renderFrontend(data);
-    } catch (err) { console.log("Engine pipe error: ", err); }
+        const container = document.getElementById('mandiRatesList');
+        container.innerHTML = '';
+        data.forEach(item => {
+            container.innerHTML += `<tr><td><b>${item.crop}</b></td><td>${item.gov}</td><td><span style="color:var(--primary); font-weight:bold;">${item.market}</span></td></tr>`;
+        });
+    } catch(err) { console.log("Mandi stream down."); }
 }
 
-function renderFrontend(items) {
-    const mandi = document.getElementById('mandiContainer');
-    const market = document.getElementById('marketContainer');
-    const tubewell = document.getElementById('tubewellContainer');
-    const doctor = document.getElementById('doctorContainer');
-    const blood = document.getElementById('bloodContainer');
-    const rishta = document.getElementById('rishtaContainer');
-    const admDel = document.getElementById('adminDeleteList');
+async function loadMainRegistry() {
+    try {
+        const res = await fetch('/api/records');
+        const items = await res.json();
+        processLayoutRender(items);
+    } catch(err) { console.log("Registry pipe block."); }
+}
 
-    // Reset Containers
-    mandi.innerHTML = ''; market.innerHTML = ''; tubewell.innerHTML = '';
-    doctor.innerHTML = ''; blood.innerHTML = ''; rishta.innerHTML = ''; admDel.innerHTML = '';
+function processLayoutRender(records) {
+    const market = document.getElementById('marketplaceList');
+    const doctors = document.getElementById('doctorsList');
+    const blood = document.getElementById('bloodDonorsList');
+    const chat = document.getElementById('chatBox');
+    const adminPanel = document.getElementById('adminActionConsole');
 
-    items.forEach(item => {
-        const id = item._id;
-        const d = item.data;
+    // Wipe states
+    market.innerHTML = ''; doctors.innerHTML = ''; blood.innerHTML = ''; chat.innerHTML = ''; adminPanel.innerHTML = '';
 
-        if (item.type === 'mandi') {
-            mandi.innerHTML += `<tr><td><b>${d.crop}</b></td><td>${d.gov}</td><td><span class="badge-blood">${d.market}</span></td></tr>`;
+    records.forEach(record => {
+        const id = record._id;
+        const d = record.data;
+
+        if (record.type === 'marketplace') {
+            market.innerHTML += `<div class="store-card" style="padding:15px; background:rgba(0,0,0,0.2);"><h4 style="color:var(--primary);">${d.item}</h4><b style="color:var(--accent);">${d.price}</b><p style="font-size:13px; color:var(--text-muted); margin:5px 0;">${d.desc}</p><a href="https://wa.me/${d.contact.replace(/[^0-9]/g, '')}" target="_blank" class="btn btn-wa" style="padding:4px 8px; font-size:12px; display:inline-block; text-decoration:none;">Contact Seller</a></div>`;
         }
-        else if (item.type === 'livestock') {
-            market.innerHTML += `<div class="store-card"><div class="store-info"><h4>${d.breed} (${d.livestockType})</h4><p class="badge-blood">${d.price}</p><p>Owner: ${d.owner}</p></div></div>`;
+        else if (record.type === 'doctor') {
+            doctors.innerHTML += `<div class="info-card" style="border-left:4px solid var(--accent); margin-bottom:10px; padding:12px;"><h4 style="color:#fff;">${d.name}</h4><small style="color:var(--text-muted);">Timings: ${d.time} | Fees: <b>${d.fees}</b></small><br><a href="tel:${d.contact}" class="btn" style="padding:3px 8px; font-size:12px; background:var(--primary);">Call Appointment</a></div>`;
         }
-        else if (item.type === 'complaint') {
-            admDel.innerHTML += `<tr><td><b>[${d.cat}]</b> ${d.desc}</td><td><button class="admin-btn-del" onclick="deleteRecord('${id}')">Resolve / Delete</button></td></tr>`;
+        else if (record.type === 'blood') {
+            blood.innerHTML += `<div class="info-card" style="border-left:4px solid var(--danger); margin-bottom:10px; padding:10px; display:flex; justify-content:space-between; align-items:center;"><div><strong>${d.name}</strong> <span style="background:var(--danger); color:white; padding:2px 6px; border-radius:4px; font-size:12px; margin-left:8px;">${d.group}</span></div><a href="https://wa.me/${d.contact.replace(/[^0-9]/g, '')}" target="_blank" class="btn btn-wa" style="padding:3px 8px; font-size:12px; text-decoration:none;">Contact</a></div>`;
         }
-        // Admin Dynamic Management mapping entries inside the loop
+        else if (record.type === 'chat') {
+            chat.innerHTML += `<p style="font-size:14px; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.02); padding-bottom:3px;"><strong style="color:var(--primary);">${d.user}:</strong> <span>${d.msg}</span></p>`;
+        }
+
+        // Admin interface generation mapping
         if(document.getElementById('adminPanel').style.display === 'block') {
-            if(item.type !== 'complaint') {
-                admDel.innerHTML += `<tr><td>${item.type.toUpperCase()}: ${d.crop || d.breed || 'Listing'}</td><td><button class="admin-btn-del" onclick="deleteRecord('${id}')">Remove</button></td></tr>`;
-            }
+            adminPanel.innerHTML += `<tr><td><b>[${record.type.toUpperCase()}]</b> ${d.item || d.name || d.user || 'Entry'}</td><td><button class="admin-btn-del" onclick="deleteRegistryItem('${id}')">Ban User / Erase</button></td></tr>`;
         }
     });
 }
 
-// Form Submission Subroutines
-async function addMandiData() {
-    const crop = document.getElementById('adCrop').value;
-    const gov = document.getElementById('adGovRate').value;
-    const market = document.getElementById('adMktRate').value;
-    await fetch('/api/add-entry', {
+// Submissions Pipeline Handling
+async function submitMarketplace(e) {
+    e.preventDefault();
+    await fetch('/api/records', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ type: 'mandi', data: { crop, gov, market } })
+        body: JSON.stringify({ type: 'marketplace', data: { item: document.getElementById('mkItem').value, price: document.getElementById('mkPrice').value, contact: document.getElementById('mkContact').value, desc: document.getElementById('mkDesc').value } })
     });
-    alert("Mandi rate broadcasted successfully!"); loadDataPipeline();
+    alert("Marketplace listing added successfully!"); e.target.reset(); loadMainRegistry();
 }
 
-async function addLivestockData() {
-    const livestockType = document.getElementById('adLvType').value;
-    const price = document.getElementById('adLvPrice').value;
-    const owner = document.getElementById('adLvOwner').value;
-    await fetch('/api/add-entry', {
+async function submitDoctor(e) {
+    e.preventDefault();
+    await fetch('/api/records', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ type: 'livestock', data: { livestockType, breed: livestockType, price, owner } })
+        body: JSON.stringify({ type: 'doctor', data: { name: document.getElementById('docName').value, time: document.getElementById('docTime').value, fees: document.getElementById('docFees').value, contact: document.getElementById('docContact').value } })
     });
-    alert("Livestock added to active market!"); loadDataPipeline();
+    alert("Doctor schedule logged into registry!"); e.target.reset(); loadMainRegistry();
+}
+
+async function submitBlood(e) {
+    e.preventDefault();
+    await fetch('/api/records', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ type: 'blood', data: { name: document.getElementById('blName').value, group: document.getElementById('blGroup').value, contact: document.getElementById('blContact').value } })
+    });
+    alert("You have been listed as an emergency blood donor!"); e.target.reset(); loadMainRegistry();
+}
+
+async function sendChat() {
+    const user = document.getElementById('chUser').value || "Pindwasi";
+    const msg = document.getElementById('chMsg').value;
+    if(!msg) return;
+    await fetch('/api/records', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ type: 'chat', data: { user, msg } })
+    });
+    document.getElementById('chMsg').value = ''; loadMainRegistry();
 }
 
 async function submitComplaint(e) {
     e.preventDefault();
-    const cat = document.getElementById('compCat').value;
-    const desc = document.getElementById('compDesc').value;
-    await fetch('/api/add-entry', {
+    await fetch('/api/records', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ type: 'complaint', data: { cat, desc } })
+        body: JSON.stringify({ type: 'complaint', data: { cat: document.getElementById('cpCat').value, desc: document.getElementById('cpDesc').value } })
     });
-    alert("Shikayat darj ho chuki hai!"); e.target.reset(); loadDataPipeline();
+    alert("Complaint routed safely to administration desk."); e.target.reset(); loadMainRegistry();
 }
 
-async function deleteRecord(id) {
-    await fetch(`/api/delete-entry/${id}`, { method: 'DELETE' });
-    alert("Record erased!"); loadDataPipeline();
+async function deleteRegistryItem(id) {
+    if(confirm("Are you sure you want to ban/delete this item record completely?")) {
+        await fetch(`/api/records/${id}`, { method: 'DELETE' });
+        loadMainRegistry();
+    }
 }
 
-// Secure Login Shell
 function loginAdmin() {
-    const email = prompt("Admin Login ID:");
-    if (email === "Juttsarkar7466@gmail.com") {
-        if (prompt("Secure Key:") === 'ZAQ!"wsx£$RFVCDE') {
+    const email = prompt("Admin System ID:");
+    if(email === "Juttsarkar7466@gmail.com") {
+        if(prompt("Secure Passcode Token:") === 'ZAQ!"wsx£$RFVCDE') {
             document.getElementById('adminPanel').style.display = "block";
-            loadDataPipeline();
-        } else alert("Access Blocked!");
+            loadMainRegistry();
+            document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth' });
+        }
     }
 }
 function logoutAdmin() {
