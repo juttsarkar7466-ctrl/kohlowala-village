@@ -8,144 +8,230 @@
 </head>
 <body>
 
-    <div class="notice-bar">📢 Welcome to the official digital hub of Kohlowala Village. Built with glassmorphism standard.</div>
+    <!-- 🚨 EMERGENCY MASTER BANNER CONTAINER -->
+    <div id="emergencyAlertBox" style="display:none; background:linear-gradient(90deg, #ff4d6d, #ff002b); color:white; padding:12px; font-weight:800; text-align:center; font-size:16px; animation: blinker 1.5s linear infinite;"></div>
+
+    <div class="notice-bar">📢 Kohlowala Village Portal Live Update Matrix Active Dashboard.</div>
 
     <header>
         <div class="logo-village">🌾 Kohlowala Village</div>
         <nav>
-            <a href="#mandi">Mandi Rates</a>
-            <a href="#marketplace">Marketplace</a>
-            <a href="#doctors">Doctors Hub</a>
-            <a href="#blood">Blood Bank</a>
-            <a href="#baithak">Baithak Chat</a>
-            <button class="theme-toggle-btn" onclick="loginAdmin()">🔒 Admin Login</button>
+            <a href="#mandi">Mandi</a>
+            <a href="#marketplace">Market</a>
+            <a href="#carpool">Lift Share</a>
+            <a href="#masjids">Masajid</a>
+            <a href="#dairy">Dairy</a>
+            <a href="#schemes">Schemes</a>
+            <button class="theme-toggle-btn" onclick="loginAdmin()">🔒 Admin Desk</button>
         </nav>
     </header>
 
     <div class="hero">
         <h1>Kohlowala Village</h1>
-        <p>Live Rates, Open Local Trade, Doctor Bookings & Blood Directory Assets.</p>
+        <p>Gaon ka digital portal. Live Mandi Bhao, Panchayat Polls, Lift Sharing aur Safe Area Modules.</p>
     </div>
 
     <div class="container">
 
-        <!-- LIVE MANDI RATES -->
+        <!-- 🗳️ PANCHAYAT VOTING POLL PANEL -->
+        <section id="panchayatPoll">
+            <h2>🗳️ Panchayat Active Voting Opinion Poll</h2>
+            <div class="form-box" style="text-align:center;">
+                <h3 id="activePollQuestion" style="color:var(--accent); margin-bottom:15px;">Panchayat ne abhi koi sawal nahi pucha.</h3>
+                <div style="display:flex; justify-content:center; gap:20px; margin-bottom:15px;">
+                    <button class="btn" onclick="castVote('yes')" style="background:#2ec4b6;">Haaye (Yes) 👍 (<span id="countYes">0</span>)</button>
+                    <button class="btn" onclick="castVote('no')" style="background:var(--danger); color:white;">Naa (No) 👎 (<span id="countNo">0</span>)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🌾 LIVE MANDI RATES -->
         <section id="mandi">
-            <h2>🌾 Live Gujranwala Mandi & Food Authority Rates</h2>
+            <h2>🌾 Live Gujranwala Mandi & Food Authority Metrics</h2>
             <div style="overflow-x:auto;">
                 <table class="custom-table">
                     <thead>
-                        <tr><th>Item / Fasal</th><th>Sarkari Rate</th><th>Gujranwala Active Price</th></tr>
+                        <tr><th>Fasal / Khadya Khurak</th><th>Sarkari Bhao</th><th>Gujranwala Active Price</th></tr>
                     </thead>
-                    <tbody id="mandiRatesList"></tbody>
+                    <tbody id="mandiContainer"></tbody>
                 </table>
             </div>
         </section>
 
-        <!-- MARKETPLACE -->
+        <!-- 🛒 LIVESTOCK MARKETPLACE -->
         <section id="marketplace">
-            <h2>🛒 Janwar & Cargo Marketplace</h2>
+            <h2>🛒 Janwar & Cargo Open Trading Market</h2>
             <div class="grid-2">
-                <div>
-                    <h3>Post Your Item For Sale</h3>
+                <div class="form-box">
+                    <h3>List Your Animal / Loader Service</h3>
                     <form onsubmit="submitMarketplace(event)">
-                        <input type="text" id="mkItem" placeholder="Cheez ka naam (e.g., Kamori Bakri, Chingchi Loader)" required>
-                        <input type="text" id="mkPrice" placeholder="Qeemat (Price e.g., Rs. 45,000)" required>
-                        <input type="text" id="mkContact" placeholder="Apna WhatsApp Number" required>
-                        <textarea id="mkDesc" placeholder="Mazeed tafseel likhein..."></textarea>
-                        <button class="btn" type="submit">Publish Item</button>
+                        <input type="text" id="mkItem" placeholder="Item Name (e.g. Sahiwal Bachra, Loader Chingchi)" required>
+                        <input type="text" id="mkPrice" placeholder="Demanded Amount (e.g. Rs. 85,000)" required>
+                        <input type="text" id="mkContact" placeholder="Your WhatsApp Contact" required>
+                        <textarea id="mkDesc" placeholder="Describe the animal health/service route details..."></textarea>
+                        <button class="btn" type="submit">Post to Marketplace</button>
                     </form>
                 </div>
-                <div>
-                    <h3>Active Listings for Sale</h3>
-                    <div id="marketplaceList" class="gallery-grid"></div>
-                </div>
+                <div id="marketplaceList" class="gallery-grid"></div>
             </div>
         </section>
 
-        <!-- DOCTORS TIMINGS -->
+        <!-- 🚗 CARPOOL/LIFT SHARING ENGINE -->
+        <section id="carpool">
+            <h2>🚗 Active Lift/Carpool Share Hub</h2>
+            <div class="grid-2">
+                <div class="form-box">
+                    <h3>Share Your Route Seat Availability</h3>
+                    <form onsubmit="submitCarpool(event)">
+                        <input type="text" id="cpRoute" placeholder="Route Link (e.g., Kohlowala to Gujranwala Bypass)" required>
+                        <input type="text" id="cpVehicle" placeholder="Vehicle Variant (e.g., Honda 125, Mehran Gari)" required>
+                        <input type="text" id="cpTime" placeholder="Departure Timing (e.g., 9:30 AM Kal Subah)" required>
+                        <input type="number" id="cpSeats" placeholder="Available Free Seats Count" required>
+                        <input type="text" id="cpContact" placeholder="WhatsApp Number" required>
+                        <button class="btn" type="submit" style="background:var(--accent);">Broadcast Lift Offer</button>
+                    </form>
+                </div>
+                <div id="carpoolContainer"></div>
+            </div>
+        </section>
+
+        <!-- 🕌 MASJID DIRECTORY PANEL -->
+        <section id="masjids">
+            <h2>🕌 Local Masajid Schedules & Urgent Elaans</h2>
+            <div class="gallery-grid" id="masjidContainer"></div>
+        </section>
+
+        <!-- 🩺 DOCTORS & APPOINTMENTS PANEL -->
         <section id="doctors">
-            <h2>🩺 Solar Tubewell & Doctor Appointment Desk</h2>
+            <h2>🩺 Registered Doctors & Medical Specialists Desk</h2>
             <div class="grid-2">
-                <div>
-                    <h3>Doctor Panel Registration Only</h3>
+                <div class="form-box">
+                    <h3>For Doctors Registration Panels</h3>
                     <form onsubmit="submitDoctor(event)">
-                        <input type="text" id="docName" placeholder="Dr. Name & Speciality" required>
-                        <input type="text" id="docTime" placeholder="Available Days & Timings" required>
-                        <input type="text" id="docFees" placeholder="Appointment Fees (e.g., Free / Rs. 500)" required>
-                        <input type="text" id="docContact" placeholder="Contact/Appointment Number" required>
-                        <button class="btn" type="submit" style="background:var(--accent);">Register Timings</button>
+                        <input type="text" id="docName" placeholder="Dr. Full Identity Name" required>
+                        <input type="text" id="docSpec" placeholder="Medical Speciality (e.g. Child Specialist)" required>
+                        <input type="text" id="docTime" placeholder="Days & Visiting Hours" required>
+                        <input type="text" id="docFees" placeholder="Consultation Fees Structure" required>
+                        <input type="text" id="docContact" placeholder="Appointment Contact Number" required>
+                        <button class="btn" type="submit">Publish Schedule</button>
                     </form>
                 </div>
-                <div>
-                    <h3>Available Doctors & Schedules</h3>
-                    <div id="doctorsList"></div>
-                </div>
+                <div id="doctorContainer"></div>
             </div>
         </section>
 
-        <!-- BLOOD BANK -->
-        <section id="blood">
-            <h2>📋 Blood Donors Registry Hub</h2>
+        <!-- 🥛 DAIRY MANAGEMENT MODULE -->
+        <section id="dairy">
+            <h2>🥛 Authentic Village Dairy & Farm Rates Sheet</h2>
+            <div style="overflow-x:auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr><th>Dairy Farm Identity</th><th>Doodh (Milk) / Ltr</th><th>Dahi / KG</th><th>Khoya Rate / KG</th></tr>
+                    </thead>
+                    <tbody id="dairyRatesContainer"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 📑 GOVT SCHEMES & BLOOD HUB -->
+        <section id="schemes">
+            <h2>📑 Government Welfare Tracking & Emergency Blood Donors</h2>
             <div class="grid-2">
-                <div>
-                    <h3>Register As Donor</h3>
+                <div class="form-box">
+                    <h3>🩸 Quick Register Blood Donor</h3>
                     <form onsubmit="submitBlood(event)">
-                        <input type="text" id="blName" placeholder="Apna Name" required>
+                        <input type="text" id="blName" placeholder="Donor Name" required>
                         <select id="blGroup">
-                            <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
-                            <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+                            <option>O+</option><option>O-</option><option>A+</option><option>B+</option><option>AB+</option>
                         </select>
-                        <input type="text" id="blContact" placeholder="WhatsApp / Phone Number" required>
-                        <button class="btn" type="submit">Submit Details</button>
+                        <input type="text" id="blContact" placeholder="Phone Number" required>
+                        <button class="btn" type="submit">Submit Donor Card</button>
                     </form>
+                    <div id="bloodContainer" style="margin-top:20px; max-height:250px; overflow-y:auto;"></div>
                 </div>
-                <div>
-                    <h3>Available Emergency Donors</h3>
-                    <div id="bloodDonorsList"></div>
+                <div class="form-box">
+                    <h3>🌾 Open Government Schemes Status</h3>
+                    <div id="schemesTrackerList"></div>
                 </div>
             </div>
         </section>
 
-        <!-- BAITHAK CHAT & COMPLAINTS -->
+        <!-- 💬 COMMUNITY CHATROOM -->
         <section id="baithak">
-            <h2>💬 Baithak Chatroom & Live Complaint Log</h2>
+            <h2>💬 Pind Di Baithak Chatbox & Direct Complaints Console</h2>
             <div class="grid-2">
-                <div>
-                    <h3>Pind Di Baithak (Last 15 Days History Window)</h3>
+                <div class="form-box">
+                    <h3>Live Chat (Auto Expiring History Protocol)</h3>
                     <div id="chatBox"></div>
                     <div style="display:flex; gap:5px;">
                         <input type="text" id="chUser" placeholder="Naam" style="width:30%;">
-                        <input type="text" id="chMsg" placeholder="Type here...">
+                        <input type="text" id="chMsg" placeholder="Write text...">
                         <button class="btn" onclick="sendChat()" style="margin-top:5px;">Send</button>
                     </div>
                 </div>
-                <div>
-                    <h3>Village Official Complaints Box</h3>
+                <div class="form-box">
+                    <h3>Official Administrative Grievance Box</h3>
                     <form onsubmit="submitComplaint(event)">
+                        <input type="text" id="cpName" placeholder="Apna Naam" required>
                         <select id="cpCat">
-                            <option>Bijli (Transformer / Line Issue)</option>
-                            <option>Pani Supply Broken</option>
-                            <option>Sarkaat / Sewage</option>
+                            <option>Bijli Transformer Malfunction</option>
+                            <option>Water Contamination / Supply Blockage</option>
+                            <option>Roadway Repair Needs</option>
                         </select>
-                        <textarea id="cpDesc" placeholder="Report issue clearly..." required></textarea>
-                        <button class="btn" type="submit">Broadcast Complaint</button>
+                        <textarea id="cpDesc" placeholder="Give brief details regarding village grievance issue..." required></textarea>
+                        <button class="btn" type="submit">Route Complaint File</button>
                     </form>
                 </div>
             </div>
         </section>
 
-        <!-- SECURE SYSTEM CONTROL STRATA (ADMIN ENGINE) -->
+        <!-- 🔒 ADMINISTRATIVE SECURE MANAGEMENT SHEETS -->
         <div id="adminPanel">
             <div class="admin-header">
-                <h2>🛠️ Admin Executive Moderation Console</h2>
-                <button class="btn" onclick="logoutAdmin()" style="background:var(--danger); color:white;">Secure Logoff</button>
+                <h2>🛠️ Executive High Administration Console</h2>
+                <div id="analyticsCounters" style="color:var(--primary); font-weight:700; font-size:14px;"></div>
+                <button class="btn" onclick="logoutAdmin()" style="background:var(--danger); color:white;">Lock Systems</button>
             </div>
-            <div class="admin-section">
-                <h3>Ban Users / Purge Content Logs</h3>
+
+            <div class="grid-2" style="margin-top:20px;">
+                <!-- EMERGENCY BROADCAST ELEMENT -->
+                <div class="admin-section">
+                    <h4>🚨 Broadcast Red Alert Warning Banner</h4>
+                    <input type="text" id="admAlertMsg" placeholder="Enter emergency status text alert...">
+                    <button class="btn" onclick="triggerEmergencyAlert()" style="background:var(--danger); color:white;">Activate Red Ticker</button>
+                    <button class="btn" onclick="clearEmergencyAlert()" style="background:#555; color:white;">Clear Ticker</button>
+                </div>
+                <!-- PANCHAYAT POLL DEPLOYER -->
+                <div class="admin-section">
+                    <h4>🗳️ Re-Deploy Panchayat Opinion Question</h4>
+                    <input type="text" id="admPollQ" placeholder="Enter community vote question structure...">
+                    <button class="btn" onclick="deployNewPoll()">Launch Live Voting</button>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top:20px;">
+                <div class="admin-section">
+                    <h4>🕌 Setup / Map Village Masjid Schedule</h4>
+                    <input type="text" id="adMsName" placeholder="Masjid Identity Name">
+                    <input type="text" id="adMsTimings" placeholder="Fajar, Zuhar, Asar, Isha Timings">
+                    <input type="text" id="adMsElaan" placeholder="Active Urgent Elaan Notification (Optional)">
+                    <button class="btn" onclick="addMasjidRecord()">Map Masjid Node</button>
+                </div>
+                <div class="admin-section">
+                    <h4>🥛 Sync Daily Dairy Farm Produce Price</h4>
+                    <input type="text" id="adDyName" placeholder="Dairy Setup Owner Name">
+                    <input type="text" id="adDyMilk" placeholder="Milk / Ltr Price">
+                    <input type="text" id="adDyDahi" placeholder="Dahi / KG Price">
+                    <input type="text" id="adDyKhoya" placeholder="Khoya / KG Price">
+                    <button class="btn" onclick="addDairyRecord()">Log Dairy Sheet</button>
+                </div>
+            </div>
+
+            <div class="admin-section" style="margin-top:30px;">
+                <h3>⛔ Active Registry Data Purging Desk</h3>
                 <table class="custom-table">
-                    <thead><tr><th>Record Classification / Identity</th><th>Action Script</th></tr></thead>
-                    <tbody id="adminActionConsole"></tbody>
+                    <thead><tr><th>Module Variant Log Info</th><th>Action Executive Execution</th></tr></thead>
+                    <tbody id="adminActionRegistrySheet"></tbody>
                 </table>
             </div>
         </div>
@@ -153,7 +239,7 @@
     </div>
 
     <footer>
-        <p>© 2026 Kohlowala Village Portal Network. Universal High Performance Layer Built.</p>
+        <p>© 2026 Kohlowala Village Portal Network. Built with Automated Glassmorphism Systems.</p>
     </footer>
 
     <script src="app.js"></script>
