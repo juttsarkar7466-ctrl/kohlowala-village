@@ -9,80 +9,165 @@
 <body>
 
     <div id="emergencyAlertBox" style="display:none; background:linear-gradient(90deg, #ff4d6d, #ff002b); color:white; padding:12px; font-weight:800; text-align:center;"></div>
-    <div class="notice-bar">📢 Kohlowala Village Digital Platform Live Window Grid Active.</div>
+    <div id="dynamicAnnouncementBar" style="display:none;"></div>
+    <div class="notice-bar">📢 Kohlowala Village Digital Platform Live Grid Active.</div>
 
-    <header>
-        <div class="logo-village">🌾 Kohlowala Village</div>
+    <header id="mainHeader">
+        <div class="logo-village">🌾 Kohlowala Hub</div>
         <nav>
-            <a href="#mandi">Mandi</a>
+            <a href="#khabarnama">📰 Khabarnama</a>
+            <a href="#mandi">🌾 Mandi</a>
             <a href="#cricket">🏏 Cricket</a>
-            <a href="#marketplace">Market</a>
-            <a href="#carpool">Lift Share</a>
-            <button class="theme-toggle-btn" onclick="loginAdmin()">🔒 Admin Control</button>
+            <a href="#rozgar">💼 Rozgar</a>
+            <a href="#lostfound">📜 Lost & Found</a>
+            <a href="#marketplace">🛒 Market</a>
+            <a href="#carpool">🚗 Lift Share</a>
+            <a href="#pharmacy">🏥 Pharmacy</a>
+            <a href="#villageInfrastructure">🏢 Infrastructure</a>
+            <a href="#gallery">🏆 Talent</a>
+            <a href="#baithak">💬 Baithak</a>
+            <button class="btn" onclick="loginAdmin()" style="padding:6px 12px; font-size:12px;">🔒 Admin Console</button>
         </nav>
     </header>
 
     <div class="hero">
-        <h1>Kohlowala Village</h1>
-        <p>Live Gujranwala Mandi Rates, Tournament Hubs & Local Trade Services.</p>
+        <h1 id="heroGreeting">Kohlowala Portal</h1>
+        <p>Live Gujranwala Crop Intelligence, Sports Boards, Automated Security & Local Trade Infrastructure.</p>
     </div>
 
     <div class="container">
 
-        <!-- 🏏 CRICKET TOURNAMENT HUB -->
-        <section id="cricket">
-            <h2>🏏 Village Cricket Tournament Board</h2>
+        <!-- 🌦️ KISAAN AUTOMATED WEATHER ADVISORY -->
+        <section id="weatherWidget">
+            <h2>🌦️ Automated Kisaan Crop Advisory (Gujranwala Live)</h2>
+            <div class="info-card" style="border-left: 5px solid var(--accent);">
+                <h3 style="margin-bottom:8px;">Live Temperature: <span id="liveTempDisplay" style="color:var(--primary);">Loading...</span></h3>
+                <p id="cropAdvisoryText" style="font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--text-muted);"></p>
+            </div>
+        </section>
+
+        <!-- 📰 DEHATI KHABARNAME -->
+        <section id="khabarnama">
+            <h2>📰 Dehati Khabarnama (Local News Feed)</h2>
             <div class="grid-2">
                 <div class="form-box">
-                    <h3>Submit Your Upcoming Match Schedule</h3>
-                    <form onsubmit="submitCricketMatch(event)">
-                        <input type="text" id="ckTeamA" placeholder="Apni Team Ka Naam (Team A)" required>
-                        <input type="text" id="ckTeamB" placeholder="Agli Team Ka Naam (Team B)" required>
-                        <input type="text" id="ckDateTime" placeholder="Match Ki Date aur Time (e.g. Sunday 4:00 PM)" required>
-                        <input type="text" id="ckGround" placeholder="Ground/Venu Ka Naam" required>
-                        <input type="text" id="ckContact" placeholder="Organizer Contact Number" required>
-                        <button class="btn" type="submit">Send For Admin Approval</button>
+                    <h3>Submit Village News Item</h3>
+                    <form onsubmit="submitNewsItem(event)">
+                        <input type="text" id="newsTitle" placeholder="Khabar ki Heading" required>
+                        <textarea id="newsContent" placeholder="Khabar ki mukammal tafseel..." required></textarea>
+                        <button class="btn" type="submit">Submit for Approval</button>
                     </form>
                 </div>
                 <div>
-                    <h3>Approved Active Matches Schedule</h3>
+                    <h3>Verified Local Feeds</h3>
+                    <div id="newsPublicContainer"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🌾 LIVE MANDI RATES -->
+        <section id="mandi">
+            <h2>🌾 Gujranwala Mandi Live Rates</h2>
+            <div style="overflow-x:auto;">
+                <table class="custom-table">
+                    <thead><tr><th>Fasal Ka Naam</th><th>Sarkari Rate</th><th>Market Rate</th></tr></thead>
+                    <tbody id="mandiContainer"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 🏏 CRICKET TOURNAMENT BOARD -->
+        <section id="cricket">
+            <h2>🏏 Cricket Tournament Arena Board</h2>
+            <div class="grid-2">
+                <div class="form-box">
+                    <h3>Register Tournament Match</h3>
+                    <form onsubmit="submitCricketMatch(event)">
+                        <input type="text" id="ckTeamA" placeholder="Apni Team A" required>
+                        <input type="text" id="ckTeamB" placeholder="Opponent Team B" required>
+                        <input type="text" id="ckDateTime" placeholder="Date & Time (e.g. Sunday 4PM)" required>
+                        <input type="text" id="ckGround" placeholder="Ground Name" required>
+                        <input type="text" id="ckContact" placeholder="Organizer Mobile Number" required>
+                        <button class="btn" type="submit">Send Match Request</button>
+                    </form>
+                </div>
+                <div>
+                    <h3>Approved Active Fixtures</h3>
                     <div id="cricketMatchesPublicList"></div>
                 </div>
             </div>
         </section>
 
-        <!-- MOTHERSHIPS MODULES FROM PREVIOUS CONFIG -->
-        <section id="mandi">
-            <h2>🌾 Live Gujranwala Mandi Rates</h2>
-            <div style="overflow-x:auto;"><table class="custom-table"><thead><tr><th>Fasal</th><th>Sarkari</th><th>Market Price</th></tr></thead><tbody id="mandiContainer"></tbody></table></div>
-        </section>
-
-        <section id="marketplace">
-            <h2>🛒 Marketplace</h2>
+        <!-- 💼 ROZGAR DESK -->
+        <section id="rozgar">
+            <h2>💼 Rozgar Desk (Daily Wage & Jobs Exchange)</h2>
             <div class="grid-2">
                 <div class="form-box">
-                    <form onsubmit="submitMarketplace(event)">
-                        <input type="text" id="mkItem" placeholder="Animal/Service Name" required>
-                        <input type="text" id="mkPrice" placeholder="Price" required>
-                        <input type="text" id="mkContact" placeholder="WhatsApp" required>
-                        <textarea id="mkDesc" placeholder="Details..."></textarea>
-                        <button class="btn" type="submit">Publish</button>
+                    <h3>Post Job Requirement / Labor Profile</h3>
+                    <form onsubmit="submitJobRegistry(event)">
+                        <select id="rjType"><option value="employer">Muzdoor Ki Zaroorat Hai (Employer)</option><option value="laborer">Main Kaam Ke Liye Available Hoon (Laborer)</option></select>
+                        <input type="text" id="rjRole" placeholder="Kaam ki details (e.g., Mistri, Tractor Driver, Katai)" required>
+                        <input type="text" id="rjWages" placeholder="Dihri / Salary (e.g., 1200 / day)" required>
+                        <input type="text" id="rjContact" placeholder="Contact Mobile Number" required>
+                        <button class="btn" type="submit">Publish to Desk</button>
                     </form>
                 </div>
-                <div id="marketplaceList" class="gallery-grid"></div>
+                <div>
+                    <h3>Active Postings Search Engine</h3>
+                    <input type="text" id="jobSearchInput" onkeyup="filterRozgarDesk()" placeholder="🔍 Type keyword to search job or laborer...">
+                    <div id="rozgarDeskPublicContainer" style="margin-top:10px; max-height:350px; overflow-y:auto;"></div>
+                </div>
             </div>
         </section>
 
+        <!-- 📜 GUMSHUDA AUR MILA REGISTRY -->
+        <section id="lostfound">
+            <h2>📜 Gumshuda Aur Mila (Lost & Found Registry)</h2>
+            <div class="grid-2">
+                <div class="form-box">
+                    <h3>Post Item Status Logs</h3>
+                    <form onsubmit="submitLostFound(event)">
+                        <select id="lfStatus"><option value="lost">Gumshuda (Lost)</option><option value="found">Mila Hai (Found)</option></select>
+                        <input type="text" id="lfItem" placeholder="Cheez ka naam aur nishani" required>
+                        <input type="text" id="lfContact" placeholder="WhatsApp / Phone Number" required>
+                        <button class="btn" type="submit">Post Entry</button>
+                    </form>
+                </div>
+                <div>
+                    <h3>Registry Logs</h3>
+                    <div id="lostFoundPublicContainer"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🛒 MARKETPLACE -->
+        <section id="marketplace">
+            <h2>🛒 Marketplace Hub (Maveshi & General Trade)</h2>
+            <div class="grid-2">
+                <div class="form-box">
+                    <form onsubmit="submitMarketplace(event)">
+                        <input type="text" id="mkItem" placeholder="Animal or Service Name" required>
+                        <input type="text" id="mkPrice" placeholder="Price Matrix" required>
+                        <input type="text" id="mkContact" placeholder="WhatsApp Number" required>
+                        <textarea id="mkDesc" placeholder="Product details..."></textarea>
+                        <button class="btn" type="submit">Publish Asset</button>
+                    </form>
+                </div>
+                <div id="marketplaceList" class="grid-2"></div>
+            </div>
+        </section>
+
+        <!-- 🚗 CARPOOL SHARE HUB -->
         <section id="carpool">
             <h2>🚗 Active Lift/Carpool Share Hub</h2>
             <div class="grid-2">
                 <div class="form-box">
                     <form onsubmit="submitCarpool(event)">
                         <input type="text" id="cpRoute" placeholder="Route (e.g., Kohlowala to Gujranwala)" required>
-                        <input type="text" id="cpVehicle" placeholder="Vehicle Name" required>
+                        <input type="text" id="cpVehicle" placeholder="Vehicle Name / Bike" required>
                         <input type="text" id="cpTime" placeholder="Departure Time" required>
                         <input type="number" id="cpSeats" placeholder="Seats Available" required>
-                        <input type="text" id="cpContact" placeholder="WhatsApp" required>
+                        <input type="text" id="cpContact" placeholder="WhatsApp Contact" required>
                         <button class="btn" type="submit">Share Lift</button>
                     </form>
                 </div>
@@ -90,33 +175,160 @@
             </div>
         </section>
 
-        <section id="baithak">
-            <h2>💬 Chatroom</h2>
+        <!-- 🏥 EMERGENCY PHARMACY & AMBULANCE LOCATOR -->
+        <section id="pharmacy">
+            <h2>🏥 Emergency Pharmacy & Ambulance Locator</h2>
             <div class="grid-2">
                 <div class="form-box">
-                    <div id="chatBox"></div>
-                    <div style="display:flex; gap:5px;"><input type="text" id="chUser" placeholder="Name" style="width:30%;"><input type="text" id="chMsg" placeholder="Message..."><button class="btn" onclick="sendChat()" style="margin-top:5px;">Send</button></div>
+                    <h3>Add Medical Service Profile</h3>
+                    <form onsubmit="submitPharmacyAmbulance(event)">
+                        <select id="paType"><option value="pharmacy">24/7 Pharmacy / Medical Store</option><option value="ambulance">Emergency Ambulance Gari</option></select>
+                        <input type="text" id="paName" placeholder="Service Name (e.g., Al Shifa Medical)" required>
+                        <input type="text" id="paContact" placeholder="Verified Phone Number" required>
+                        <button class="btn" type="submit">Submit to Admin</button>
+                    </form>
+                </div>
+                <div id="pharmacyPublicContainer"></div>
+            </div>
+        </section>
+
+        <!-- 🏢 OLD INTEGRATED VITAL DATA (DONORS, TUBEWELL, MASAJID) -->
+        <section id="villageInfrastructure">
+            <h2>🏢 Village Vital Infrastructure Registry</h2>
+            <div class="grid-3">
+                <div class="form-box">
+                    <h3>🩸 Blood Donors</h3>
+                    <form onsubmit="submitDonor(event)" style="margin-bottom:15px;">
+                        <input type="text" id="dnName" placeholder="Donor Name" required>
+                        <input type="text" id="dnGroup" placeholder="Blood Group (e.g., O+)" required>
+                        <input type="text" id="dnContact" placeholder="Phone" required>
+                        <button class="btn" type="submit" style="padding:5px 10px; font-size:12px;">Add Donor</button>
+                    </form>
+                    <div id="donorList" style="max-height:150px; overflow-y:auto;"></div>
+                </div>
+                <div class="form-box">
+                    <h3>⚡ Solar Tubewell Log</h3>
+                    <form onsubmit="submitTubewell(event)" style="margin-bottom:15px;">
+                        <input type="text" id="twName" placeholder="Zameendar Name" required>
+                        <input type="text" id="twStatus" placeholder="Current Running Status / Cost Info" required>
+                        <button class="btn" type="submit" style="padding:5px 10px; font-size:12px;">Log Status</button>
+                    </form>
+                    <div id="tubewellList" style="max-height:150px; overflow-y:auto;"></div>
+                </div>
+                <div class="form-box">
+                    <h3>🕌 Masajid Prayer Timings</h3>
+                    <form onsubmit="submitMasjid(event)" style="margin-bottom:15px;">
+                        <input type="text" id="msName" placeholder="Masjid Name" required>
+                        <input type="text" id="msFajr" placeholder="Fajr Time" required>
+                        <input type="text" id="msJuma" placeholder="Juma / Asr Time" required>
+                        <button class="btn" type="submit" style="padding:5px 10px; font-size:12px;">Update Prayer</button>
+                    </form>
+                    <div id="masjidList" style="max-height:150px; overflow-y:auto;"></div>
                 </div>
             </div>
         </section>
 
-        <!-- 🔒 ADMINISTRATIVE MANAGEMENT SHEETS -->
+        <!-- 🏆 SPORTS GALLERY (RIGHT-TO-LEFT MARQUEE) -->
+        <section id="gallery">
+            <h2>🏆 Sports & Youth Talent Gallery (Local Heroes Board)</h2>
+            <div class="form-box" style="margin-bottom:15px;">
+                <form onsubmit="submitGalleryHero(event)" style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <input type="text" id="glName" placeholder="Hero Name / Tournament Title" style="flex:1;" required>
+                    <input type="text" id="glRecord" placeholder="Achievement Record Description" style="flex:2;" required>
+                    <button class="btn" type="submit">Add to Gallery Board</button>
+                </form>
+            </div>
+            <div class="marquee-container">
+                <div class="marquee-content" id="sportsMarqueeContent"></div>
+            </div>
+        </section>
+
+        <!-- 📅 CENTRALIZED EVENT SCHEDULER -->
+        <section id="eventsCalendar">
+            <h2>📅 Centralized Event Scheduler (Mele, Tournaments, Camps)</h2>
+            <div class="grid-2">
+                <div class="info-card">
+                    <h3>Upcoming Scheduled Events</h3>
+                    <div id="eventsPublicContainer" style="margin-top:10px;"></div>
+                </div>
+                <div class="form-box" id="adminCalendarFormBox" style="opacity:0.6; pointer-events:none;">
+                    <h3>Add New Event Log (Admin Authorization Required)</h3>
+                    <form onsubmit="submitEventLog(event)">
+                        <input type="text" id="evTitle" placeholder="Event Name (e.g. Vaccination Camp)">
+                        <input type="text" id="evDate" placeholder="Target Date / Duration">
+                        <button class="btn" type="submit">Schedule Event</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 💬 CHATROOM BAITHAK -->
+        <section id="baithak">
+            <h2>💬 Chatroom Baithak (Manners Mode Filter Active)</h2>
+            <div class="form-box">
+                <div id="chatBox"></div>
+                <div style="display:flex; gap:8px; margin-top:10px;">
+                    <input type="text" id="chUser" placeholder="Name" style="width:25%; margin:0;">
+                    <input type="text" id="chMsg" placeholder="Type message safely..." style="width:60%; margin:0;">
+                    <button class="btn" onclick="sendChat()" style="width:15%; margin:0; padding:0;">Send</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔒 ADMINISTRATIVE MANAGEMENT MASTER CONTROL DASHBOARD -->
         <div id="adminPanel">
-            <div class="admin-header">
-                <h2>🛠️ Admin Strategic Dashboard Console</h2>
-                <button class="btn" onclick="logoutAdmin()" style="background:var(--danger); color:white;">Lock Down</button>
+            <div class="admin-header" style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 style="color:var(--danger);">🛠️ Admin Strategic Master Control Panel</h2>
+                <button class="btn btn-danger" onclick="logoutAdmin()">Secure Lockdown</button>
+            </div>
+            
+            <p style="color:var(--accent); margin-top:5px;">⏳ Auto-Lock Active: Panel 10 Mins idle honey par automatic lock ho jaye ga.</p>
+            
+            <div class="admin-grid">
+                <!-- Approval Systems -->
+                <div class="admin-card">
+                    <h3>⏳ Pending Approval Pipeline</h3>
+                    <div id="adminApprovalQueueContainer" style="margin-top:10px; max-height:200px; overflow-y:auto;"></div>
+                </div>
+
+                <!-- 📢 Dynamic Broadcast Management Engine -->
+                <div class="admin-card">
+                    <h3>📢 Announcements Editor</h3>
+                    <input type="text" id="adAnnounceText" placeholder="General Ticker Announcement Text">
+                    <button class="btn" onclick="updateAdminAnnouncement('announcement')" style="padding:6px; font-size:12px;">Set General Ticker</button>
+                    <input type="text" id="adEmergencyText" placeholder="🔴 Critical Emergency Text" style="margin-top:10px;">
+                    <button class="btn btn-danger" onclick="updateAdminAnnouncement('emergency')" style="padding:6px; font-size:12px;">Trigger Emergency</button>
+                </div>
+
+                <!-- 🚫 Fraud Control & Blacklist System -->
+                <div class="admin-card">
+                    <h3>🚫 Fraud Control (Blacklist Engine)</h3>
+                    <input type="text" id="adBanNumber" placeholder="Phone Number to Blacklist (Bina Spaces)">
+                    <button class="btn btn-danger" onclick="blacklistUserNumber()" style="padding:6px; font-size:12px;">Ban/Block Number</button>
+                    <div id="adminBlacklistRenderContainer" style="margin-top:10px; font-size:12px; color:var(--danger);"></div>
+                </div>
+
+                <!-- 🎨 Special Festival Interface Themes Changer -->
+                <div class="admin-card">
+                    <h3>🎨 Festival Header Changer</h3>
+                    <select id="adFestivalThemeSelector">
+                        <option value="none">Standard Digital Mode</option>
+                        <option value="theme-eid">🌙 Holy Eid Festival Context</option>
+                        <option value="theme-14aug">🇵🇰 Independence Day (14 August)</option>
+                        <option value="theme-match">🏏 Grand Tournament Layout Overlay</option>
+                    </select>
+                    <button class="btn" onclick="changeFestivalThemeOverlay()" style="padding:6px; font-size:12px; margin-top:5px;">Apply Global Theme</button>
+                </div>
             </div>
 
-            <!-- CRICKET APPROVAL LOG QUEUE -->
-            <div class="admin-section" style="border:1px solid var(--accent);">
-                <h4>⏳ Pending Cricket Matches Approval Queue</h4>
-                <div id="adminCricketApprovalQueue" style="margin-top:10px;"></div>
-            </div>
-
-            <div class="admin-section" style="margin-top:20px;">
-                <h3>⛔ Content Deletion Panel</h3>
-                <table class="custom-table">
-                    <thead><tr><th>Identity Logs</th><th>Action Script</th></tr></thead>
+            <!-- 🧹 System Cleaning Mechanisms & Deletion Logs Panel -->
+            <div class="admin-card" style="margin-top:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>⛔ Master Deletion Log Sheet & Flash Systems</h3>
+                    <button class="btn btn-danger" onclick="triggerFlashDatabaseClean()" style="padding:8px 14px; font-size:12px;">🧹 1-Click Flash Cleanup (>30 Days Old Logs)</button>
+                </div>
+                <table class="custom-table" style="margin-top:10px;">
+                    <thead><tr><th>Entry Type</th><th>Metadata Content Logs</th><th>Action Trigger</th></tr></thead>
                     <tbody id="adminActionRegistrySheet"></tbody>
                 </table>
             </div>
@@ -124,7 +336,8 @@
 
     </div>
 
-    <footer><p>© 2026 Kohlowala Village Portal Network. Fixed Universally.</p></footer>
+    <footer><p>© 2026 Kohlowala Village Portal Strategic Engine Network. All Rights Reserved.</p></footer>
+    
     <script src="app.js"></script>
 </body>
 </html>
