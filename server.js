@@ -11,74 +11,80 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// DB Connectivity
+// Database connection stability logic
 const mongoURI = process.env.MONGO_URI;
 if (mongoURI) {
     mongoose.connect(mongoURI)
-        .then(() => console.log("🔥 Connected securely to Kohlowala Master Database Hub."))
-        .catch(err => console.log("⚠️ Standby mode operational: ", err.message));
+        .then(() => console.log("🔥 Kohlowala Cluster-V3 Engine Synced Successfully."))
+        .catch(err => console.log("⚠️ Standby Pipeline Initialized: ", err.message));
 }
 
-// Global Core Structural Mongoose Model
-const PortalSchema = new mongoose.Schema({
+// Master Schema Architecture
+const UltimateSchema = new mongoose.Schema({
     type: String,
     data: Object,
     createdAt: { type: Date, default: Date.now }
 }, { strict: false });
 
-const DataRegistry = mongoose.model('PortalRegistry', PortalSchema);
+const VillageRegistry = mongoose.model('VillageRegistryV3', UltimateSchema);
 
-// 🛠️ CRITICAL TRIGGER: 15 Days Chat Auto Eraser Logic Engine
-async function purgeExpiredChats() {
+// 🧹 15 Days Auto Chat Eraser Engine
+setInterval(async () => {
     try {
-        const fifteenDaysAgo = new Date();
-        fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
-        
-        const result = await DataRegistry.deleteMany({
-            type: 'chat',
-            createdAt: { $lt: fifteenDaysAgo }
-        });
-        if(result.deletedCount > 0) {
-            console.log(`🧹 Cache Purged: ${result.deletedCount} chats older than 15 days deleted.`);
-        }
-    } catch(err) { console.log("Eraser Engine Error: ", err.message); }
-}
-setInterval(purgeExpiredChats, 60000); // Check every minute automatically
+        const expiryLimit = new Date();
+        expiryLimit.setDate(expiryLimit.getDate() - 15);
+        await VillageRegistry.deleteMany({ type: 'chat', createdAt: { $lt: expiryLimit } });
+    } catch(err) { console.log("Cleaner system logs: ", err.message); }
+}, 300000); // Trigger clean every 5 minutes
 
-// 🌾 AUTOMATED LIVE DATA FEED (Gujranwala Market Rates Simulator)
+// 🌾 Live Gujranwala Mandi Simulator Data Feed
 app.get('/api/live-mandi', (req, res) => {
-    // Dynamically generated highly accurate live market rates mimicking active Gujranwala metrics
-    const baseHour = new Date().getHours();
-    const fluctuation = Math.sin(baseHour) * 50; 
-    
+    const hours = new Date().getHours();
+    const dynamicFluctuation = Math.sin(hours) * 45;
     res.json([
-        { crop: "🌾 Gandum (Wheat) Per 40KG", gov: "Rs. 3,900", market: `Rs. ${Math.round(4150 + fluctuation)}` },
-        { crop: "🍅 Tamatar (Gujranwala Mandi)", gov: "Rs. 120 / KG", market: `Rs. ${Math.round(140 + (fluctuation/5))}` },
-        { crop: "🧅 Piaz (Fresh Onion Stock)", gov: "Rs. 200 / KG", market: `Rs. ${Math.round(210 - (fluctuation/8))}` },
-        { crop: "🍼 Khalis Doodh (Food Authority standard)", gov: "Rs. 180 / Ltr", market: "Rs. 200" },
-        { crop: "🌻 Cooking Oil (1st Grade Premium)", gov: "Rs. 480 / Ltr", market: `Rs. ${Math.round(495 + (fluctuation/10))}` }
+        { crop: "🌾 Gandum (Wheat) 40KG", gov: "Rs. 3,900", market: `Rs. ${Math.round(4120 + dynamicFluctuation)}` },
+        { crop: "🌾 Basmati Paddy (Chawal)", gov: "Rs. 7,200", market: `Rs. ${Math.round(7450 + dynamicFluctuation)}` },
+        { crop: "🍅 Tamatar (Gujranwala Market)", gov: "Rs. 120", market: `Rs. ${Math.round(135 + (dynamicFluctuation/5))}` },
+        { crop: "🌻 Premium Ghee / Oil 1KG", gov: "Rs. 450", market: `Rs. ${Math.round(480 + (dynamicFluctuation/10))}` }
     ]);
 });
 
-// Structural API Data Endpoints
-app.get('/api/records', async (req, res) => {
+// Generic Data Retreival Routing Pipeline
+app.get('/api/hub', async (req, res) => {
     try {
-        const records = await DataRegistry.find({});
-        res.json(records);
+        const logs = await VillageRegistry.find({});
+        res.json(logs);
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.post('/api/records', async (req, res) => {
+app.post('/api/hub', async (req, res) => {
     try {
-        const newRecord = new DataRegistry(req.body);
-        await newRecord.save();
+        // Special logic for polls to increment votes instead of stacking documents
+        if (req.body.type === 'vote') {
+            const poll = await VillageRegistry.findOne({ type: 'poll' });
+            if (poll) {
+                if (req.body.voteType === 'yes') poll.data.yesCount = (poll.data.yesCount || 0) + 1;
+                if (req.body.voteType === 'no') poll.data.noCount = (poll.body.noCount || 0) + 1;
+                poll.markModified('data');
+                await poll.save();
+                return res.json({ success: true });
+            }
+        }
+        
+        // Overwrite active alert/poll if admin changes them
+        if (req.body.type === 'emergency' || req.body.type === 'poll') {
+            await VillageRegistry.deleteMany({ type: req.body.type });
+        }
+
+        const entry = new VillageRegistry(req.body);
+        await entry.save();
         res.json({ success: true });
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.delete('/api/records/:id', async (req, res) => {
+app.delete('/api/hub/:id', async (req, res) => {
     try {
-        await DataRegistry.findByIdAndDelete(req.params.id);
+        await VillageRegistry.findByIdAndDelete(req.params.id);
         res.json({ success: true });
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -88,5 +94,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Kohlowala Universal Node Active on Port ${PORT}`);
+    console.log(`🚀 Kohlowala Village Live & Protected on Port ${PORT}`);
 });
