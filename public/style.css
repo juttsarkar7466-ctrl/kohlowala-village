@@ -172,7 +172,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--primary); }
 .btn-danger { background: var(--danger) !important; color: white !important; }
 .btn-approve { background: var(--success) !important; color: #000 !important; padding: 6px 12px; font-size: 12px; border-radius: 4px; font-weight: bold; border:none; cursor:pointer;}
 
-/* 🏆 SPORTS RIGHT-TO-LEFT SCROLLING MARQUEE SYSTEM */
+/* 🏆 SPORTS MARQUEE SYSTEM */
 .marquee-container {
     width: 100%;
     overflow: hidden;
@@ -210,7 +210,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--primary); }
     overflow-y: auto;
 }
 
-/* 🔒 ADMIN STRATEGIC PANEL */
+/* 🔒 ADMIN PANEL STYLING */
 #adminPanel {
     display: none;
     background: rgba(18, 12, 18, 0.98);
