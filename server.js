@@ -1,41 +1,41 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Render ka system assigned port auto-pick karega, koi 3000 ka jhanjhat nahi
+const PORT = process.env.PORT || 8080; 
+
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// 🛡️ CRASH PREVENTION: MongoDB Secure Connection Logic
+// 🗄️ MONGODB CONNECTIVITY LOCK (Data Save Hota Rahega)
 const mongoURI = process.env.MONGO_URI;
-
-if (!mongoURI) {
-    console.error("⚠️ WARNING: MONGO_URI is missing inside Environment Variables!");
-    console.log("👉 Server is running in LOCAL mode without database connectivity.");
-} else {
+if (mongoURI) {
     mongoose.connect(mongoURI)
-    .then(() => console.log("🔥 Connected successfully to MongoDB Atlas!"))
-    .catch((err) => {
-        console.error("❌ MongoDB Connection Failure: ", err.message);
-        console.log("💡 Tip: Check your IP Whitelist status on MongoDB Atlas dashboard.");
-    });
+        .then(() => console.log("🔥 MongoDB Atlas Database connected successfully!"))
+        .catch(err => console.log("⚠️ Database connection delayed but server kept running: ", err.message));
+} else {
+    console.log("💡 Running in fallback mode. Please add MONGO_URI in Render Environment Variables.");
 }
 
-// Basic Live Route Check
+// Live Status Endpoint
 app.get('/api/status', (req, res) => {
     res.json({ 
         status: "online", 
-        engine: "Kohlowala High-Performance Engine v2",
-        theme: "Shahi Dark Mode" 
+        database: mongoose.connection.readyState === 1 ? "Connected" : "Connecting..." 
     });
 });
 
-// App Engine Initialization
-app.listen(PORT, () => {
-    console.log(`🚀 Kohlowala Engine online and running smoothly on port ${PORT}`);
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Binds perfectly to Render's internal network routing
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Kohlowala Cloud Engine is now active on Render!`);
 });
