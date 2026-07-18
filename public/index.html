@@ -2,207 +2,151 @@
 <html lang="ur">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kohlowala Village Portal</title>
+    <!-- 📱 Update 1: Perfect Scaling & Safe Pinch-to-Zoom Support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Kohlowala Village Portal - Shahi Dark Edition</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="notice-bar"><div class="notice-content" id="liveNotice">Loading portal data...</div></div>
+    <!-- 📢 TICKER NOTICE BAR -->
+    <div class="notice-bar">
+        📢 Kohlowala Village Portal Live! Apne computerized record aur chatroom ka istemal karein.
+    </div>
 
+    <!-- 🌾 HEADER & NAVIGATION -->
     <header>
-        <div class="logo">🌾 Kohlowala</div>
+        <div class="logo">👑 Shahi Kohlowala</div>
         <nav>
-            <a href="#home">Home</a>
-            <a href="#gallery">🖼️ Gallery</a>
-            <a href="#masjid">🕌 Masajid</a>
-            <a href="#dairy">🥛 Dairy rates</a>
-            <a href="#carpool">🚗 Lift Do</a>
-            <a href="#emergency">📞 Contacts</a>
-            <a href="#olx">🛒 OLX</a>
-            <a href="#polls">🗳️ Voting</a>
-            <a href="#chat">💬 Chatroom</a>
-            <button class="theme-toggle-btn" onclick="toggleDarkMode()" id="themeBtn">🌙 Dark</button>
-            <button class="admin-toggle-btn" onclick="loginAdmin()">🔒 Admin</button>
+            <a href="#services">Sahooliat</a>
+            <a href="#directory">Directory</a>
+            <a href="#store">Bazaar</a>
+            <a href="#chatroom">Baithak</a>
+            <button class="admin-toggle-btn" onclick="toggleAdminPanel()">🔒 Admin</button>
         </nav>
     </header>
 
-    <div class="hero" id="home">
-        <h1>Kohlowala Village Portal</h1>
-        <p>Android aur iPhone par 100% Lock Responsive, Super-Fast Grid Layout.</p>
+    <!-- 🚀 HERO SECTION -->
+    <div class="hero">
+        <h1>Welcome to Kohlowala</h1>
+        <p>Aapke gaon ka apna modern digital portal. Ab har kisaan, dukan aur shehri online.</p>
     </div>
 
     <div class="container">
-
-        <!-- PHOTO GALLERY -->
-        <section id="gallery">
-            <h2>🖼️ Kohlowala Photo Gallery</h2>
-            <div class="gallery-grid" id="galleryContainer"></div>
-        </section>
-
-        <!-- MOSQUE & NAMAZ ALERTS -->
-        <section id="masjid">
-            <h2>🕌 Masajid Timings & Elaan Alerts</h2>
-            <div id="masjidContainer"></div>
-        </section>
-
-        <!-- DAIRY TRACKER -->
-        <section id="dairy">
-            <h2>🥛 Doodh aur Dairy Tracker (Milk Rate)</h2>
-            <div style="overflow-x:auto;">
-                <table class="custom-table" id="dairyTable">
-                    <thead><tr><th>Dairy / Dukan Name</th><th>Doodh Rate (Ltr)</th><th>Khoya Rate (Kg)</th><th>Subah Time</th><th>Shaam Time</th></tr></thead>
-                    <tbody></tbody>
+        
+        <!-- 📊 RECORD & SERVICES SECTION -->
+        <section id="services">
+            <h2>🌾 Gaon Ke Records & Utilities</h2>
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Naam</th>
+                            <th>Khet Number</th>
+                            <th>Fasal Status</th>
+                            <th>Rabta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Chaudhary Asif</td>
+                            <td>Killa No. 12</td>
+                            <td>Gandum (Tayyar)</td>
+                            <td><button class="btn btn-wa">WhatsApp</button></td>
+                        </tr>
+                        <tr>
+                            <td>Mian Tanveer</td>
+                            <td>Killa No. 45</td>
+                            <td>Kapaas (Khaad Marhala)</td>
+                            <td><button class="btn btn-wa">WhatsApp</button></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- LIFT DO / CARPOOLING -->
-        <section id="carpool">
-            <h2>🚗 Lift Do / Carpooling (Pind se Shehar Lift)</h2>
-            <div class="grid-2">
-                <div class="form-box">
-                    <h3>Apni Gari/Bike ki Lift Offer Karein</h3>
-                    <br>
-                    <form onsubmit="submitCarpool(event)">
-                        <div class="form-group"><label>Driver ka Naam</label><input type="text" id="cDriver" required></div>
-                        <div class="form-group"><label>Gari / Bike Model</label><input type="text" id="cVehicle" placeholder="e.g. Honda 125" required></div>
-                        <div class="form-group"><label>Route (Kahan se Kahan)</label><input type="text" id="cRoute" placeholder="e.g. Kohlowala se Gujranwala" required></div>
-                        <div class="form-group"><label>Janay ka Time</label><input type="text" id="cTime" placeholder="e.g. Subah 8:00 AM" required></div>
-                        <div class="form-group"><label>Khali Seats (Gunjaish)</label><input type="text" id="cSeats" placeholder="e.g. 2 bande" required></div>
-                        <div class="form-group"><label>WhatsApp/Phone</label><input type="text" id="cContact" required></div>
-                        <button type="submit" class="btn">Lift Offer Post Karein</button>
-                    </form>
-                </div>
-                <div>
-                    <h3>Active Lifts (Safar Ke Sathi)</h3>
-                    <div id="carpoolContainer"></div>
-                </div>
+        <!-- 🩸 DIRECTORY SECTION -->
+        <section id="directory">
+            <h2>📋 Khidmatgaar & Blood Donors</h2>
+            <div class="info-card">
+                <strong>Ali Raza (Donation Volunteer)</strong> 
+                <span class="badge-gender">Male</span> 
+                <span class="badge-blood">O+ Positive</span>
+                <p style="margin-top: 5px; color: var(--text-muted);">Zaroorat ke waqt rabta karein: 0300-XXXXXXX</p>
             </div>
         </section>
 
-        <!-- EMERGENCY DIRECTORY -->
-        <section id="emergency">
-            <h2>📞 Emergency Contacts</h2>
-            <div style="overflow-x:auto;">
-                <table class="custom-table" id="emergencyTable">
-                    <thead><tr><th>Naam</th><th>Role</th><th>Rabta</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- KISAAN OLX -->
-        <section id="olx">
-            <h2>🛒 Kisaan OLX Bazaar</h2>
-            <div class="grid-2">
-                <div class="form-box">
-                    <h3>Ad Lagayein</h3>
-                    <form onsubmit="submitOlx(event)">
-                        <div class="form-group"><input type="text" id="oTitle" placeholder="Cheez ka Naam" required></div>
-                        <div class="form-group"><input type="text" id="oPrice" placeholder="Qeemat" required></div>
-                        <div class="form-group"><input type="text" id="oOwner" placeholder="Apna Naam" required></div>
-                        <div class="form-group"><input type="text" id="oContact" placeholder="WhatsApp Number" required></div>
-                        <div class="form-group"><textarea id="oDesc" placeholder="Details" rows="2" required></textarea></div>
-                        <button type="submit" class="btn">Publish Ad</button>
-                    </form>
-                </div>
-                <div id="olxContainer"></div>
-            </div>
-        </section>
-
-        <!-- VOTING SYSTEM -->
-        <section id="polls">
-            <h2>🗳️ Panchayat Voting Polls</h2>
-            <div class="info-card" style="text-align: center;">
-                <h3 id="pollQuestion">Loading active poll...</h3>
-                <div style="margin: 20px 0; display:flex; justify-content:center; gap:15px;">
-                    <button class="btn btn-wa" onclick="castVote('yes')">👍 Haan</button>
-                    <button class="btn" style="background-color:var(--danger);" onclick="castVote('no')">👎 Nahi</button>
-                </div>
-                <p>Haan: <span id="yesCount">0</span> | Nahi: <span id="noCount">0</span></p>
-            </div>
-        </section>
-
-        <!-- LIVE CHATROOM -->
-        <section id="chat">
-            <h2>💬 Live Village Chatroom</h2>
-            <div class="form-box">
-                <div id="chatBox"></div>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="chatUser" placeholder="Naam" style="width: 25%;">
-                    <input type="text" id="chatMsg" placeholder="Message..." style="width: 60%;">
-                    <button class="btn" onclick="sendChatMessage()" style="width: 15%;">Send</button>
+        <!-- 🖼️ PHOTO GALLERY / BAZAAR GRID -->
+        <section id="store">
+            <h2>🛒 Kohlowala Digital Bazaar</h2>
+            <div class="gallery-grid">
+                <div class="store-card">
+                    <div class="store-img" style="height: 180px; background-color: #222; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">Pure Desi Sarson Oil</div>
+                    <div class="store-info">
+                        <h4>Khalis Sarson ka Tel</h4>
+                        <p style="color: var(--accent); font-weight: bold;">Rs. 600 / Litre</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ==================== ADMIN PANEL ==================== -->
-        <section id="adminPanel">
+        <!-- 💬 CHATROOM OPTIMIZATION -->
+        <section id="chatroom">
+            <h2>💬 Pind di Baithak (Live Chat)</h2>
+            <div id="chatBox">
+                <p><strong style="color: var(--primary);">System:</strong> Kohlowala chatroom mein khushamdeed! Yahan tameeri guftagu karein.</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="chatUser" placeholder="Aapka Naam" style="flex: 1;">
+                <input type="text" id="chatMsg" placeholder="Paigham likhein..." style="flex: 2;">
+                <button class="btn" onclick="sendChatMessage()" style="touch-action: manipulation;">Bhejein</button>
+            </div>
+        </section>
+
+        <!-- 🔒 ADMIN PANEL CONTROL SHEET -->
+        <div id="adminPanel">
             <div class="admin-header">
-                <h3>⚙️ Admin Dashboard Control Panel</h3>
-                <button class="btn" style="background-color: var(--danger);" onclick="logoutAdmin()">Logout</button>
+                <h3>🛠️ Shahi Control Panel (Admin Only)</h3>
+                <button onclick="toggleAdminPanel()" style="background:none; border:none; color:white; cursor:pointer;">❌ Click to Close</button>
             </div>
-            
             <div class="admin-section">
-                <h4>🕌 Update Masjid Timings & Elaan</h4>
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px; margin-bottom:10px;">
-                    <input type="text" id="adMName" placeholder="Masjid Name">
-                    <input type="text" id="adMFaj" placeholder="Fajar">
-                    <input type="text" id="adMZuh" placeholder="Zuhar">
-                    <input type="text" id="adMAsr" placeholder="Asar">
-                    <input type="text" id="adMMag" placeholder="Maghrib">
-                    <input type="text" id="adMIsh" placeholder="Isha">
-                    <input type="text" id="adMJum" placeholder="Juma Timings">
-                </div>
-                <input type="text" id="adMElaan" placeholder="Masjid ka Elaan (If any)" style="width:100%; margin-bottom:10px;">
-                <button class="btn" onclick="addMasjidRecord()">Save/Update Masjid</button>
+                <h4>Records Control</h4>
+                <p style="color:var(--text-muted); font-size:13px; margin-bottom:10px;">Yahan se aap kisi bhi galat entry ko delete kar sakte hain.</p>
+                <button class="admin-btn-del">Delete Selection</button>
             </div>
-
-            <div class="admin-section">
-                <h4>🥛 Update Dairy Milk Rates</h4>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="adDName" placeholder="Dairy Name">
-                    <input type="text" id="adDMilk" placeholder="Milk Rate">
-                    <input type="text" id="adDKhoya" placeholder="Khoya Rate">
-                    <input type="text" id="adDMorn" placeholder="Morning Time">
-                    <input type="text" id="adDEve" placeholder="Evening Time">
-                    <button class="btn" onclick="addDairyRecord()">Save Rate</button>
-                </div>
-            </div>
-
-            <div class="admin-section">
-                <h4>🖼️ Upload Gallery Photo Link</h4>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="admGalTitle" placeholder="Title">
-                    <input type="text" id="admGalUrl" placeholder="Image URL URL Link">
-                    <button class="btn" onclick="addGalleryPhoto()">Upload</button>
-                </div>
-            </div>
-
-            <div class="admin-section">
-                <h4>🗳️ Launch Panchayat Poll</h4>
-                <input type="text" id="admPollQuestion" placeholder="Enter Question" style="width:70%;">
-                <button class="btn" onclick="startNewPoll()">Launch</button>
-            </div>
-
-            <div class="admin-section">
-                <h4>🗑️ Database Cleaner (Remove Lists)</h4>
-                <h5>Masajid</h5><table class="custom-table" id="admListMasjids"><tbody></tbody></table>
-                <h5>Dairies</h5><table class="custom-table" id="admListDairies"><tbody></tbody></table>
-                <h5>Carpool Lifts</h5><table class="custom-table" id="admListCarpools"><tbody></tbody></table>
-                <h5>Gallery Photos</h5><table class="custom-table" id="admListGallery"><tbody></tbody></table>
-                <h5>OLX Ads</h5><table class="custom-table" id="admListOlx"><tbody></tbody></table>
-            </div>
-        </section>
+        </div>
 
     </div>
 
+    <!-- 🪟 FOOTER SETUP -->
     <footer>
-        <p>© 2026 Kohlowala Village Portal, Gujranwala | Secure SSL Optimized</p>
-        <span class="admin-login-link" onclick="loginAdmin()">🔒 Control Login</span>
+        <p>© 2026 Kohlowala Village Portal. Crafted for High Mobile Performance.</p>
     </footer>
 
-    <script src="app.js"></script>
+    <script>
+        function toggleAdminPanel() {
+            var panel = document.getElementById('adminPanel');
+            if(panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+                panel.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function sendChatMessage() {
+            var user = document.getElementById('chatUser').value || "Gumnaam";
+            var msg = document.getElementById('chatMsg').value;
+            if(!msg) return;
+
+            var chatBox = document.getElementById('chatBox');
+            var newMsg = document.createElement('p');
+            newMsg.innerHTML = `<strong style="color: var(--accent);">${user}:</strong> ${msg}`;
+            chatBox.appendChild(newMsg);
+            
+            document.getElementById('chatMsg').value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
 </body>
 </html>
